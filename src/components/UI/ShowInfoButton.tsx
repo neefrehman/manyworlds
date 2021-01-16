@@ -45,7 +45,8 @@ export const ShowInfoButton = ({
                     hidden={!infoIsVisible}
                 >
                     <p>
-                        a study of signed distanced functions in webgl, by{" "}
+                        a study of signed distanced functions and noise fields in
+                        webgl, by{" "}
                         <a
                             href="https://neef.co"
                             target="_blank"
