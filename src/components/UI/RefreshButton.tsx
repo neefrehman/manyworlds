@@ -8,7 +8,7 @@ interface RefreshButtonProps {
 export const RefreshButton = ({ onClick }: RefreshButtonProps) => {
     return (
         <button className="uiButton refreshButton" tabIndex={0} onClick={onClick}>
-            create new scene
+            new world
         </button>
     );
 };
