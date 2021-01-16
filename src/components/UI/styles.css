@@ -36,7 +36,7 @@
 .infoModal {
     position: fixed;
     bottom: var(--edgeButtonMargin);
-    right: var(--edgeButtonMargin);
+    left: var(--edgeButtonMargin);
     width: calc(100vw - (var(--edgeButtonMargin) * 2));
     max-width: 450px;
     padding: 0.7rem 0.8rem;
@@ -51,8 +51,18 @@
 }
 
 @media (max-width: 500px) {
+    .uiWrapper {
+        width: calc(100vw - (var(--edgeButtonMargin) * 2));
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    .uiWrapper >:not(:last-child) {
+        margin: 0;
+    }
+
     .uiButton:not(.infoModal) {
-        padding: 0.15rem 0.6rem;
+        padding: 0.15rem 0.5rem;
         font-size: 0.92rem;
     }
 }
