@@ -63,7 +63,7 @@
     }
 
     .uiButton:not(.infoModal) {
-        padding: 0.15rem 0.47rem;
-        font-size: 0.86rem;
+        padding: 0.16rem 0.47rem;
+        font-size: 0.885rem;
     }
 }
