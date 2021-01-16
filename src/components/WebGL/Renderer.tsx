@@ -46,6 +46,8 @@ export const WebGLRenderer = ({
         animationSettings = {},
     } = settings;
 
+    // TODO: width and height are updated on rerenders, and the canvas has updated dimensions
+    // but only the size that was visible on pageload will be 'painted' 🤔
     const [width, height] = dimensions;
     const { fps: throttledFps, delay, endAfter } = animationSettings;
 
