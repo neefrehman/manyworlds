@@ -1,0 +1,38 @@
+.uiWrapper {
+    --edgeButtonMargin: 1.4rem;
+    position: fixed;
+    top: var(--edgeButtonMargin);
+    left: var(--edgeButtonMargin);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.uiWrapper >:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.uiButton {
+    border: none;
+    padding: 0.1rem 0.4rem;
+    color: white;
+    font-family: monaco, monospace;
+    font-size: 0.86rem;
+    background-color: rgba(200, 200, 200, 0.2);
+    backdrop-filter: blur(20px);
+}
+
+.uiButton:hover {
+    background-color: #eee;
+    color: #212121;
+}
+
+.infoModal {
+    position: fixed;
+    bottom: var(--edgeButtonMargin);
+    left: var(--edgeButtonMargin);
+    width: 100%;
+    max-width: 100vh;
+    padding: 0.7rem;
+}

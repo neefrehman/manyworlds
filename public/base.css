@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: -webkit-fill-available;
+}
+
+body {
+    font-family: helvetica, arial, sans-serif;
+    line-height: 1.5;
+    color: #ffffff;
+    background-color: #212121;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    max-width: max-content;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
+}
+
+a, button {
+    cursor: pointer;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
