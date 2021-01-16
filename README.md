@@ -2,27 +2,27 @@
 
 # manyworlds 🌌✨🪐👽
 
-A visual study of signed distanced functions and noise fields in glsl.
+A visual study of signed distanced functions and noise fields in WebGL.
 
-[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have the function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate these views.
+[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views.
 
 **Visit site: [manyworlds.neef.co](https://manyworlds.neef.co/)**
 
-(The site is quite GPU intensive Try running it in a smaller if the framerate is low)
+(The site is quite GPU intensive. Try running it in a smaller if the framerate is low)
 
 ## Project setup
 
-This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact lifecycle methods to create and manage a WebGL context (so should be quite portable to other projects). This renderer can be passed an object containing [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string (in this case processed by glslify to enable glsl imports), and an `onFrame` callback which can be used to update the uniforms and other attributes of the sketch. The interfaces for the renderer and callbacks are in the component's file.
+This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact lifecycle methods to create and manage a WebGL context. This renderer can be passed an object containing [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string (in this case processed by glslify to enable glsl imports), and an `onFrame` callback which can be used to update the uniforms and other attributes of the sketch. The interfaces for the renderer and callbacks can be found in the component's file.
 
-#### Technologies:
+#### Tools:
 - [Preact](https://preactjs.com/)
 - [Snowpack](https://www.snowpack.dev/)
 - [esbuild](https://esbuild.github.io/)
 - [glslify](https://github.com/glslify/glslify)
 
-To get started on your device, fork the repo and run `npm install && npm run start` to set up the (lightning fast, thanks to Snowpack) dev server.
+To get started on your device, fork this repo and run `npm install && npm run start` to set up the (lightning fast, thanks to Snowpack) dev server.
 
-#### Fast refresh issues
+#### Fast refresh dev server workaround
 
 As a workaround for [an issue that causes builds to fail](https://github.com/snowpackjs/snowpack/discussions/1458), I've disabled Fast Refresh (via `prefresh`) by commenting out the appropriate lines in `snowpack.config.js` and `.babelrc`.
 
@@ -32,7 +32,7 @@ The resources that I've found valuable regarding shaders, Ray Marching, SDFs are
 
 - [The Book of Shaders](https://thebookofshaders.com/)
 - [WebGL Fundamentals](https://webgl2fundamentals.org/)
-- [Inigo Quilez's website](https://www.iquilezles.org/www/index.htm) (where the functions for the 3d `sdShapes` come from)
+- [Inigo Quilez's website](https://www.iquilezles.org/www/index.htm) (where the functions for the 3d `sdShapes` in this repo come from)
 - [Jamie Wong's Ray Marching and SDF blog post](http://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 - [Yuri Artyukh's Ray Marching video tutorial](https://youtu.be/q2WcGi3Cr9w)
 
