@@ -24,7 +24,6 @@ interface WebGLRendererProps {
     settings?: WebGLRendererSettings;
     className?: string;
     style?: JSX.CSSProperties;
-    children?: JSX.Element | HTMLElement;
 }
 
 /**
@@ -35,7 +34,6 @@ export const WebGLRenderer = ({
     settings = {},
     className,
     style,
-    children,
 }: WebGLRendererProps) => {
     const canvasElement = useRef<HTMLCanvasElement>(null);
     const drawProps = useRef<WebGLDrawProps>({} as WebGLDrawProps);
@@ -123,7 +121,7 @@ export const WebGLRenderer = ({
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
         gl.linkProgram(program);
-        gl.useProgram(program); // FIXME: this line errors in dev server due to prefresh: "_s is not a function"
+        gl.useProgram(program);
 
         const createdUniforms: {
             key: string;

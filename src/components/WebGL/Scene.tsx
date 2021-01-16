@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { memo } from "preact/compat";
 import glsl from "glslify";
 
 import type { WebGLSetupFn } from "./Renderer";
@@ -20,7 +21,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const idleMousePosition = inSquare(width, height);
 
     const initialPlaybackSpeed = inRange(0.000065, 0.00008);
-    let playbackSpeed = initialPlaybackSpeed;
+    let playbackSpeed = initialPlaybackSpeed;    
 
     return {
         uniforms: {
@@ -29,12 +30,15 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             resolution: { value: [width, height], type: "2f" },
             mousePosition: { value: [0, height], type: "2f" },
 
-            bgBrightness: { value: inBeta(1, 3) * 0.059, type: "1f" },
+            bgBrightness: { value: inBeta(1, 3) * 0.06, type: "1f" },
             colorStart: { value: hexToVec3(createHex()), type: "3f" },
             colorEnd: { value: hexToVec3(createHex()), type: "3f" },
 
             noiseStyle: { value: pick([0, 1, 2, 3, 4, 5]), type: "1i" },
-            noiseRotationSpeed: { value: inRange(0.66, 1), type: "1f" },
+            noiseRotationSpeed: {
+                value: inRange(0.66, 0.9) * createSign(),
+                type: "1f",
+            },
             sinNoiseScale: { value: inRange(5, 12), type: "1f" },
             sinScalar1: { value: inRange(0, 30), type: "1f" },
             sinScalar2: { value: inRange(0, 5), type: "1f" },
@@ -45,7 +49,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 type: "3f",
             },
             highFrequencysimplexNoiseScale: {
-                value: 1.5 + inBeta(1, 3) * 50,
+                value: 1.5 + inBeta(1, 3) * 48.5,
                 type: "1f",
             },
             simplexIntensity: { value: inRange(0.5, 4.3), type: "1f" },
@@ -60,8 +64,8 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
             shapePositionOffset: {
                 value: [
-                    inGaussian(0, 0.1) * aspect,
-                    inGaussian(0, 0.1),
+                    inGaussian(0, 0.115) * aspect,
+                    inGaussian(0, 0.115),
                     (inBeta(1.8, 5) - 0.1) * 0.63,
                 ],
                 type: "3f",
@@ -83,7 +87,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             #pragma glslify: sdCappedCone = require("../../utils/glsl/sdShapes/sdCappedCone.glsl");
             #pragma glslify: sdPyramid = require("../../utils/glsl/sdShapes/sdPyramid.glsl");
 
-            #define PI 3.1415
+            #define PI 3.14159
             #define TAU 2.0 * PI
 
             varying vec2 vUv;
@@ -117,24 +121,24 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
 
             float sineNoise(vec3 pos) {
                 if (noiseStyle == 0) {
-                    // spawn — 150121
+                    // inverted volume with simplex field — 150121
                     return min(
                         sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
                         noise(vec4(pos * simplexNoiseScale * 0.94, time * 6.7)) * simplexIntensity
                     );
                 } else if (noiseStyle == 1) {
-                    // trippy 1 — 150121
+                    // sin & simplex, cumulative — 150121
                     return
                         sin(pos.x) + sin(pos.y) + sin(pos.z) / (sinNoiseScale / (sinNoiseScale * 9.0)) +
                         noise(vec4(pos * simplexNoiseScale, time * 13.0)) * simplexIntensity;
                 } else if (noiseStyle == 2) {
-                    // trippy 2 — 150121
+                    // sin & simplex, max value — 150121
                     return max(
                         sin(pos.x * 1.96) + sin(pos.y * 1.96) + (sin(pos.z * 1.96) * sinNoiseScale),
                         sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 10.0)) * simplexIntensity)
                     );
                 } else if (noiseStyle == 3) {
-                    // sin-differential — 170121
+                    // high sin field differential — 170121
                     float scalar1 = scalarSwap == 1 ? sinScalar1 : sinScalar2;
                     float scalar2 = scalarSwap == 1 ? sinScalar2 : sinScalar1;
                     return max(
@@ -142,13 +146,13 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                         sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 10.0)) * simplexIntensity)
                     );
                 } else if (noiseStyle == 4) {
-                    // high-freq — 160121
+                    // high simplex field frequency — 160121
                     return max(
                         sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale),
                         sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.0)) * simplexIntensity * 2.0)
                     );
                 } else {
-                    // stretched-spawn — 180121
+                    // inverted volume with stretched simplex field — 180121
                     return min(
                         sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
                         noise(vec4(
@@ -186,7 +190,6 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                     shape = sdCuboid(p1, vec3(shapeDimension1 * 0.88));
                 }
                 
-                
                 vec3 p2 = rotate(pos, vec3(mousePosition, 1.0), -time * TAU * noiseRotationSpeed);
                 float sineNoiseValue = (0.83 - sineNoise((p2 + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
 
@@ -195,7 +198,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
 
             vec3 getColor(vec3 pos) {
                 float amount = clamp((1.5 - length(pos)) / 2.3, 0.0, 1.0);
-                vec3 color = 0.593 + 0.708 * cos(TAU * (colorStart + amount * colorEnd));
+                vec3 color = 0.620 + 0.708 * cos(TAU * (colorStart + amount * colorEnd));
 
                 return color * amount;
             }
@@ -249,12 +252,30 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             uniforms.mousePosition.value = lerpVector(
                 uniforms.mousePosition.value,
                 mouseHasEntered ? mousePosition : idleMousePosition,
-                0.002
+                0.001
             );
         },
     };
 };
 
-export const Scene = () => (
-    <WebGLRenderer sketch={sketch} style={{ width: "100%", height: "100%" }} />
+interface SceneProps {
+    refreshState: {};
+}
+
+export const Scene = memo(
+    ({ refreshState }: SceneProps) => {
+        return (
+            <WebGLRenderer
+                sketch={sketch}
+                settings={{ dimensions: [window.innerWidth, window.innerHeight] }}
+                style={{ width: "100vw", height: "100vh" }}
+            />
+        );
+    },
+    (previousRender, nextRender) => {
+        if (previousRender.refreshState === nextRender.refreshState) {
+            return true;
+        }
+        return false;
+    }
 );

@@ -2,7 +2,7 @@
     --edgeButtonMargin: 1.4rem;
     position: fixed;
     top: var(--edgeButtonMargin);
-    left: var(--edgeButtonMargin);
+    right: var(--edgeButtonMargin);
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -19,20 +19,32 @@
     color: white;
     font-family: monaco, monospace;
     font-size: 0.86rem;
-    background-color: rgba(200, 200, 200, 0.2);
-    backdrop-filter: blur(20px);
+    background-color: rgba(200, 200, 200, 0.09);
+    backdrop-filter: blur(6px);
 }
 
-.uiButton:hover {
-    background-color: #eee;
-    color: #212121;
+.refreshButton {
+    margin-top: 1px;
+}
+
+.infoButton {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .infoModal {
     position: fixed;
     bottom: var(--edgeButtonMargin);
-    left: var(--edgeButtonMargin);
+    right: var(--edgeButtonMargin);
     width: 100%;
-    max-width: 100vh;
-    padding: 0.7rem;
+    max-width: calc(100vw - (var(--edgeButtonMargin) * 2));
+    padding: 0.7rem 0.8rem;
+}
+
+.infoModal p:not(:last-child) {
+    margin-bottom: 0.8rem;
+}
+
+.uiButton:not(.infoModal):hover, .infoModal a:hover {
+    background-color: rgba(255, 255, 255, 0.25);
 }

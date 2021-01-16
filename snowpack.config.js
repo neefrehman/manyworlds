@@ -1,4 +1,5 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
+
 module.exports = {
     mount: {
         public: { url: "/", static: true },
@@ -6,18 +7,15 @@ module.exports = {
     },
     plugins: [
         "@snowpack/plugin-typescript",
-        "@prefresh/snowpack",
+        // "@prefresh/snowpack", //causes build issues: https://github.com/snowpackjs/snowpack/discussions/1458
         [
             "@snowpack/plugin-babel",
             {
-                input: [".js", ".mjs", ".jsx", ".ts", ".tsx", ".glsl"],
+                input: [".js", ".mjs", ".jsx", ".ts", ".tsx"],
             },
         ],
     ],
-    routes: [
-        /* Enable an SPA Fallback in development: */
-        { match: "routes", src: ".*", dest: "/index.html" },
-    ],
+    routes: [{ match: "routes", src: ".*", dest: "/index.html" }],
     optimize: {
         bundle: true,
         minify: true,

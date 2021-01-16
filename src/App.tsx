@@ -8,23 +8,23 @@ import "./components/UI/styles.css";
 
 const App = () => {
     const [uiIsShown] = useState(!window.location.search.includes("no-ui"));
-    const [_, forceRefresh] = useState({}); // TODO: refresh logic
     const [infoIsVisible, setInfoIsVisible] = useState(false);
+    const [refreshState, forceRefresh] = useState({});
 
     return (
         <main>
             {uiIsShown && (
                 <UIWrapper>
+                    <RefreshButton onClick={() => forceRefresh({})} />
                     <ShowInfoButton
                         infoIsVisible={infoIsVisible}
                         setInfoIsVisible={setInfoIsVisible}
                     />
-                    <RefreshButton onClick={() => forceRefresh({})} />
                 </UIWrapper>
             )}
 
             <SceneWrapper onClick={() => setInfoIsVisible(false)}>
-                <Scene />
+                <Scene refreshState={refreshState} />
             </SceneWrapper>
         </main>
     );

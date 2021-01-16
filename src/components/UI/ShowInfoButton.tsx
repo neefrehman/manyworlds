@@ -45,21 +45,24 @@ export const ShowInfoButton = ({
                     hidden={!infoIsVisible}
                 >
                     <p>
-                        A study of signed distanced functions in glsl by{" "}
+                        a study of signed distanced functions in webgl, by{" "}
                         <a
                             href="https://neef.co"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Neef Rehman
+                            neef rehman
                         </a>
-                        . Open source on{" "}
+                        .
+                    </p>
+                    <p>
+                        open source on{" "}
                         <a
-                            href="https://github.com"
+                            href="https://github.com/neefrehman/manyworlds"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            GitHub
+                            github
                         </a>
                         .
                     </p>

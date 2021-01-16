@@ -9,5 +9,7 @@
         ],
         ["@babel/preset-typescript", { "jsxPragma": "h" }]
     ],
-    "plugins": [["@prefresh/babel-plugin", { "skipEnvCheck": true }], "glsl"]
+    "plugins": ["glsl"
+        /*, ["@prefresh/babel-plugin", { "skipEnvCheck": true }] - causes build issues: https://github.com/snowpackjs/snowpack/discussions/1458 */
+    ]
 }
