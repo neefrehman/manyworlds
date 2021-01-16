@@ -21,6 +21,7 @@
     font-size: 0.86rem;
     background-color: rgba(200, 200, 200, 0.09);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .refreshButton {
