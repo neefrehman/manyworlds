@@ -51,7 +51,7 @@
 }
 
 @media (max-width: 500px) {
-    .uiButton {
+    .uiButton:not(.infoModal) {
         padding: 0.15rem 0.6rem;
         font-size: 0.92rem;
     }
