@@ -10,17 +10,17 @@ A visual study of signed distanced functions and noise fields in WebGL.
 
 **Visit site: [manyworlds.neef.co](https://manyworlds.neef.co/)**
 
-(The site is quite GPU intensive. Try running it in a smaller if the framerate is low)
+(The site is quite GPU intensive. Try running it in a smaller window if the framerate is low)
 
 ## Project setup
 
-This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact lifecycle methods to create and manage a WebGL context. This renderer can be passed an object containing [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string (in this case processed by glslify to enable glsl imports), and an `onFrame` callback which can be used to update the uniforms and other attributes of the sketch. The interfaces for the renderer and callbacks can be found in the component's file.
+This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact lifecycle methods to create and manage a WebGL context. The renderer accepts a function which returns shader [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string, and an `onFrame` callback used to update the uniforms and other attributes of the sketch. If you pass it all of these things you've made yourself a WebGL scene! The interfaces for the renderer and callback props can be found in the component's file.
 
 #### Tools:
-- [Preact](https://preactjs.com/)
-- [Snowpack](https://www.snowpack.dev/)
-- [esbuild](https://esbuild.github.io/)
-- [glslify](https://github.com/glslify/glslify)
+- [Preact](https://preactjs.com/) - React but far smaller
+- [Snowpack](https://www.snowpack.dev/) — ESM-first build tool
+- [esbuild](https://esbuild.github.io/) — Blazing fast bundler
+- [glslify](https://github.com/glslify/glslify) — Enables imports of glsl from other files
 
 To get started on your device, fork this repo and run `npm install && npm run start` to set up the (lightning fast, thanks to Snowpack) dev server.
 
