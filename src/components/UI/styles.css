@@ -36,9 +36,9 @@
 .infoModal {
     position: fixed;
     bottom: var(--edgeButtonMargin);
-    left: var(--edgeButtonMargin);
+    right: var(--edgeButtonMargin);
     width: calc(100vw - (var(--edgeButtonMargin) * 2));
-    max-width: 450px;
+    max-width: calc(500px - (var(--edgeButtonMargin) * 2));
     padding: 0.7rem 0.8rem;
 }
 

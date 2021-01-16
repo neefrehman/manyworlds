@@ -30,7 +30,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             resolution: { value: [width, height], type: "2f" },
             mousePosition: { value: [0, height], type: "2f" },
 
-            bgBrightness: { value: inBeta(1, 3) * 0.06, type: "1f" },
+            bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
             colorStart: { value: hexToVec3(createHex()), type: "3f" },
             colorEnd: { value: hexToVec3(createHex()), type: "3f" },
 
