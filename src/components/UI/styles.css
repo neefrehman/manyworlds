@@ -52,6 +52,7 @@
 
 @media (max-width: 500px) {
     .uiWrapper {
+        --edgeButtonMargin: 1.24rem;
         width: calc(100vw - (var(--edgeButtonMargin) * 2));
         flex-direction: row-reverse;
         justify-content: space-between;
@@ -62,7 +63,7 @@
     }
 
     .uiButton:not(.infoModal) {
-        padding: 0.15rem 0.5rem;
-        font-size: 0.92rem;
+        padding: 0.15rem 0.47rem;
+        font-size: 0.86rem;
     }
 }
