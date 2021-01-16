@@ -1,4 +1,6 @@
-<img src="assets/readme-banner.gif" alt="a looping gif of the animations rendered by manyworlds" width="100%">
+<a href="https://manyworlds.neef.co/" target="_blank" rel="noopener noreferrer">
+  <img src="assets/readme-banner.gif" alt="a looping gif of the animations rendered by manyworlds" width="100%">
+</a>
 
 # manyworlds 🌌✨🪐👽
 
