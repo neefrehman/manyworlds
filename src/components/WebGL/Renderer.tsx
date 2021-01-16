@@ -123,7 +123,7 @@ export const WebGLRenderer = ({
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
         gl.linkProgram(program);
-        // gl.useProgram(program); // FIXME: this line errors in dev server due to prefresh: "_s is not a function"
+        gl.useProgram(program); // FIXME: this line errors in dev server due to prefresh: "_s is not a function"
 
         const createdUniforms: {
             key: string;
