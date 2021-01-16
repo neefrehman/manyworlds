@@ -1,4 +1,6 @@
-# manyworlds ✨🪐🌌👽
+<img src="assets/readme-banner.gif" alt="a looping gif of the animations rendered by manyworlds" width="100%">
+
+# manyworlds 🌌✨🪐👽
 
 A visual study of signed distanced functions and noise fields in glsl.
 
