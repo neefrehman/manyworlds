@@ -36,8 +36,8 @@
     position: fixed;
     bottom: var(--edgeButtonMargin);
     right: var(--edgeButtonMargin);
-    width: 100%;
-    max-width: calc(100vw - (var(--edgeButtonMargin) * 2));
+    width: calc(100vw - (var(--edgeButtonMargin) * 2));
+    max-width: 450px;
     padding: 0.7rem 0.8rem;
 }
 
