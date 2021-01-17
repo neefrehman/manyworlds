@@ -23,7 +23,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const initialPlaybackSpeed = inGaussian(0.69, 0.015) * 0.0001;
     let playbackSpeed = initialPlaybackSpeed;
 
-    const mouseLerpSpeed = inGaussian(1.05, 0.15) * 0.002;
+    const mouseLerpSpeed = inGaussian(1, 0.15) * 0.002;
 
     return {
         uniforms: {
@@ -207,8 +207,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                     shape = sdCuboid(p1, vec3(shapeDimension1 * 0.88));
                 }
                 
-                vec2 mousePositionFromCenter = vec2((mousePosition / 2.0) - resolution);
-                vec3 p2 = rotate(pos, vec3(mousePositionFromCenter / resolution, 1.0), -time * noiseRotationSpeed);
+                vec3 p2 = rotate(pos, vec3(mousePosition / resolution, 1.0), -time * noiseRotationSpeed);
                 float sineNoiseValue = (0.83 - sineNoise((p2 + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
 
                 return max(shape, sineNoiseValue);
