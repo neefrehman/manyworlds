@@ -20,10 +20,10 @@ import {
 const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const idleMousePosition = inSquare(width, height);
 
-    const initialPlaybackSpeed = inGaussian(0.65, 0.015) * 0.0001;
+    const initialPlaybackSpeed = inGaussian(0.62, 0.015) * 0.0001;
     let playbackSpeed = initialPlaybackSpeed;
 
-    const mouseLerpSpeed = inGaussian(0.9, 0.12) * 0.001;
+    const mouseLerpSpeed = inGaussian(0.86, 0.1) * 0.001;
 
     return {
         uniforms: {
