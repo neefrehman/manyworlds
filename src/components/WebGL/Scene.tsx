@@ -8,7 +8,7 @@ import { WebGLRenderer } from "./Renderer";
 import { hexToVec3 } from "../../utils/glsl/hexToVec3";
 import { lerp, lerpVector } from "../../utils/math";
 import {
-    createHex,
+    createRandomHex,
     createSign,
     inBeta,
     inGaussian,
@@ -20,23 +20,26 @@ import {
 const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const idleMousePosition = inSquare(width, height);
 
-    const initialPlaybackSpeed = inRange(0.000065, 0.00008);
-    let playbackSpeed = initialPlaybackSpeed;    
+    const initialPlaybackSpeed = inGaussian(0.69, 0.015) * 0.0001;
+    let playbackSpeed = initialPlaybackSpeed;
+
+    const mouseLerpSpeed = inGaussian(1.05, 0.15) * 0.002;
 
     return {
         uniforms: {
             aspect: { value: aspect, type: "1f" },
             time: { value: inRange(0, 500), type: "1f" },
             resolution: { value: [width, height], type: "2f" },
-            mousePosition: { value: [0, height], type: "2f" },
+            mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
             bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
-            colorStart: { value: hexToVec3(createHex()), type: "3f" },
-            colorEnd: { value: hexToVec3(createHex()), type: "3f" },
+            colorBrightness: { value: inRange(0.625, 0.8), type: "1f" },
+            color1: { value: hexToVec3(createRandomHex()), type: "3f" },
+            color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
-            noiseStyle: { value: pick([0, 1, 2, 3, 4, 5]), type: "1i" },
+            noiseStyle: { value: pick([0, 1, 2, 3, 4, 5, 6, 7]), type: "1i" },
             noiseRotationSpeed: {
-                value: inRange(0.66, 0.9) * createSign(),
+                value: inRange(0.6, 0.8) * createSign(),
                 type: "1f",
             },
             sinNoiseScale: { value: inRange(5, 12), type: "1f" },
@@ -53,7 +56,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 type: "1f",
             },
             simplexIntensity: { value: inRange(0.5, 4.3), type: "1f" },
-            grainIntensity: { value: inRange(0.005, 0.034), type: "1f" },
+            grainIntensity: { value: inRange(0.005, 0.031), type: "1f" },
 
             baseShape: {
                 value: inRange(0, 7, { isInteger: true }),
@@ -98,8 +101,9 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             uniform vec2 mousePosition;
 
             uniform float bgBrightness;
-            uniform vec3 colorStart;
-            uniform vec3 colorEnd;
+            uniform float colorBrightness;
+            uniform vec3 color1;
+            uniform vec3 color2;
 
             uniform int noiseStyle;
             uniform float noiseRotationSpeed;
@@ -121,37 +125,50 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
 
             float sineNoise(vec3 pos) {
                 if (noiseStyle == 0) {
-                    // inverted volume with simplex field — 150121
-                    return min(
-                        sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
-                        noise(vec4(pos * simplexNoiseScale * 0.94, time * 6.7)) * simplexIntensity
-                    );
-                } else if (noiseStyle == 1) {
-                    // sin & simplex, cumulative — 150121
+                    // additive - sin & simplex — 150121
                     return
                         sin(pos.x) + sin(pos.y) + sin(pos.z) / (sinNoiseScale / (sinNoiseScale * 9.0)) +
-                        noise(vec4(pos * simplexNoiseScale, time * 13.0)) * simplexIntensity;
-                } else if (noiseStyle == 2) {
-                    // sin & simplex, max value — 150121
+                        noise(vec4(pos * simplexNoiseScale, time * 8.8)) * simplexIntensity;
+                } else if (noiseStyle == 1) {
+                    // comparative - sin & simplex — 150121
                     return max(
                         sin(pos.x * 1.96) + sin(pos.y * 1.96) + (sin(pos.z * 1.96) * sinNoiseScale),
-                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 10.0)) * simplexIntensity)
+                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 7.6)) * simplexIntensity)
                     );
-                } else if (noiseStyle == 3) {
-                    // high sin field differential — 170121
+                } else if (noiseStyle == 2) {
+                    // comparative - high sin field differential — 170121
                     float scalar1 = scalarSwap == 1 ? sinScalar1 : sinScalar2;
                     float scalar2 = scalarSwap == 1 ? sinScalar2 : sinScalar1;
                     return max(
                         sin(pos.x * scalar1) + sin(pos.y * scalar1) + (sin(pos.z * scalar1) * sinNoiseScale),
-                        sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 10.0)) * simplexIntensity)
+                        sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 7.0)) * simplexIntensity)
+                    );
+                } else if (noiseStyle == 3) {
+                    // inverted comparison - high sin field differential — 170121
+                    float scalar1 = scalarSwap == 1 ? sinScalar1 : sinScalar2;
+                    float scalar2 = scalarSwap == 1 ? sinScalar2 : sinScalar1;
+                    return min(
+                        sin(pos.x * scalar1) + sin(pos.y * scalar1) + (sin(pos.z * scalar1) * sinNoiseScale),
+                        sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 8.0)) * simplexIntensity)
                     );
                 } else if (noiseStyle == 4) {
-                    // high simplex field frequency — 160121
+                    // comparative - high simplex field frequency — 160121
                     return max(
                         sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale),
-                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.0)) * simplexIntensity * 2.0)
+                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.7)) * simplexIntensity * 2.0)
                     );
-                } else {
+                } else if (noiseStyle == 5) {
+                    // additive - high simplex field frequency — 160121
+                    return
+                        sin(pos.x) + sin(pos.y) + sin(pos.z) / (sinNoiseScale / (sinNoiseScale * 7.0)) +
+                        noise(vec4(pos * highFrequencysimplexNoiseScale, time * 21.0)) * simplexIntensity;
+                } else if (noiseStyle == 6) {
+                    // inverted volume with simplex field — 150121
+                    return min(
+                        sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
+                        noise(vec4(pos * simplexNoiseScale * 0.94, time * 10.75)) * simplexIntensity
+                    );
+                } else if (noiseStyle == 7) {
                     // inverted volume with stretched simplex field — 180121
                     return min(
                         sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
@@ -166,7 +183,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             }
 
             float sdf(vec3 pos) {
-                vec3 p1 = rotate(vec3(pos + shapePositionOffset), vec3(1.0, 1.0, 0.0), time * TAU);
+                vec3 p1 = rotate(vec3(pos + shapePositionOffset), vec3(1.0, 1.0, 0.0), time * 0.715 * TAU);
 
                 float shape = 0.0;
 
@@ -190,7 +207,8 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                     shape = sdCuboid(p1, vec3(shapeDimension1 * 0.88));
                 }
                 
-                vec3 p2 = rotate(pos, vec3(mousePosition, 1.0), -time * TAU * noiseRotationSpeed);
+                vec2 mousePositionFromCenter = vec2((mousePosition / 2.0) - resolution);
+                vec3 p2 = rotate(pos, vec3(mousePositionFromCenter / resolution, 1.0), -time * noiseRotationSpeed);
                 float sineNoiseValue = (0.83 - sineNoise((p2 + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
 
                 return max(shape, sineNoiseValue);
@@ -198,7 +216,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
 
             vec3 getColor(vec3 pos) {
                 float amount = clamp((1.5 - length(pos)) / 2.3, 0.0, 1.0);
-                vec3 color = 0.620 + 0.708 * cos(TAU * (colorStart + amount * colorEnd));
+                vec3 color = colorBrightness + 0.708 * cos(TAU * (color1 + amount * color2));
 
                 return color * amount;
             }
@@ -252,11 +270,11 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             uniforms.mousePosition.value = lerpVector(
                 uniforms.mousePosition.value,
                 mouseHasEntered ? mousePosition : idleMousePosition,
-                0.001
+                mouseLerpSpeed
             );
         },
     };
-};
+};;;
 
 interface SceneProps {
     refreshState: {};
@@ -268,7 +286,6 @@ export const Scene = memo(
             <WebGLRenderer
                 sketch={sketch}
                 settings={{ dimensions: [window.innerWidth, window.innerHeight] }}
-                style={{ width: "100vw", height: "100vh" }}
             />
         );
     },

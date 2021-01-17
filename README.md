@@ -4,9 +4,9 @@
 
 # manyworlds 🌌✨🪐👽
 
-A visual study of signed distanced functions and noise fields in WebGL.
+A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
-[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views.
+[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. Nerdy inspirations include retro scifi book covers, and Starfleet HQ in Star Trek: Discovery.
 
 ### Visit site: [manyworlds.neef.co](https://manyworlds.neef.co/)
 

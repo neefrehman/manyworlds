@@ -1,5 +1,5 @@
 import { mapToRange } from "../math/mapToRange";
-import { testHex } from "../random/createHex";
+import { testHex } from "../random/createRandomHex";
 
 /**
  * Converts a hex code to a `vec3`, to be passed to a shader uniform
