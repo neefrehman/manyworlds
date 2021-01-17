@@ -6,7 +6,7 @@
 
 A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
-[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. Nerdy inspirations include retro scifi book covers, and Starfleet HQ in Star Trek: Discovery 💁🏾‍♂️
+[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. Nerdy inspirations include the [Many-worlds interpretation](https://en.wikipedia.org/wiki/Many-worlds_interpretation) in quantum physics, old science fiction book covers (such as [Rendezvous with Rama](https://bookmust.wordpress.com/2014/06/08/rendezvous-with-rama/)), and [Starfleet headquarters](https://i2.wp.com/musingsofamiddleagedgeek.files.wordpress.com/2020/11/30d90200-8b80-4ab0-a6c6-ae7f26637f02.jpeg) in season three of Star Trek: Discovery 💁🏾‍♂️
 
 ### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
