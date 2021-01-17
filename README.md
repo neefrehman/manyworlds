@@ -25,7 +25,13 @@ This project is a simple single-page app built with TypeScript & Preact, and bun
 
 ### Getting Started
 
-To get started on your device, fork this repo and run `npm install && npm run start` to set up the (lightning fast, thanks to Snowpack) dev server.
+To get started on your device, fork this repo and run:
+
+```bash
+npm install && npm run start
+```
+
+This will set up the (lightning fast, thanks to Snowpack) dev server, and you should be good to go.
 
 #### Fast refresh dev server workaround
 
