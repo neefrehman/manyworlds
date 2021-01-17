@@ -33,7 +33,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
             bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
-            colorBrightness: { value: inRange(0.625, 0.8), type: "1f" },
+            colorBrightness: { value: inRange(0.58, 0.76), type: "1f" },
             color1: { value: hexToVec3(createRandomHex()), type: "3f" },
             color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 

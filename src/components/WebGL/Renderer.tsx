@@ -51,6 +51,7 @@ export const WebGLRenderer = ({
     const [width, height] = dimensions;
     const { fps: throttledFps, delay, endAfter } = animationSettings;
 
+    // Here we pass in our animation settings and created `onFrame` props to a `requestAnimationFrame` hook.
     const { startAnimation, stopAnimation } = useAnimationFrame(
         animationProps => {
             drawFunction.current?.({
@@ -77,6 +78,7 @@ export const WebGLRenderer = ({
         }
     );
 
+    // Default vertex shader used to pass our vUv co-ordinate varying to the fragment shader
     const defaultVert = glsl`
         precision highp float;
         attribute vec2 position;
@@ -88,6 +90,7 @@ export const WebGLRenderer = ({
         }
     `;
 
+    // Default Fragment shader — a white canvas
     const defaultFrag = glsl`
         void main() {
             gl_FragColor = vec4(1.0);
@@ -95,10 +98,12 @@ export const WebGLRenderer = ({
     `;
 
     useEffect(() => {
+        // Create WebGL context and program
         const canvas = canvasElement.current;
         const gl = canvas.getContext("webgl") as WebGLRenderingContext;
         const program = gl.createProgram() as WebGLProgram;
 
+        // initiallise our drawProps object
         const initialSketchProps: Partial<WebGLDrawProps> = {
             gl,
             program,
@@ -110,6 +115,7 @@ export const WebGLRenderer = ({
             mousePosition: [0, 0],
         };
 
+        // Which we then pass to the sketch function
         const sketchObject = setupSketch(initialSketchProps as WebGLDrawProps);
 
         const uniforms = sketchObject.uniforms as UniformDict;
@@ -117,6 +123,7 @@ export const WebGLRenderer = ({
         const frag = sketchObject.frag ?? defaultFrag;
         const onFrame = sketchObject.onFrame;
 
+        // compile and initialise our shaders
         const vertexShader = compileShader(vert, gl.VERTEX_SHADER, gl);
         const fragmentShader = compileShader(frag, gl.FRAGMENT_SHADER, gl);
 
@@ -125,6 +132,8 @@ export const WebGLRenderer = ({
         gl.linkProgram(program);
         gl.useProgram(program);
 
+        // Create the uniforms we defined and store their details for later
+        // so we can keep them up to date and handle cleanup
         const createdUniforms: {
             key: string;
             handle: WebGLUniformLocation;
@@ -133,11 +142,12 @@ export const WebGLRenderer = ({
             (acc: any[], [key, { value, type }]) => {
                 const handle = getUniformLocation(key, program, gl);
                 setUniform(handle, value, type, gl);
-                return [...acc, { key, handle, type }]; // an array we can use later to update the uniforms
+                return [...acc, { key, handle, type }];
             },
             []
         );
 
+        // Create out position data and give it to the shaders as an attribute
         /* prettier-ignore */
         const vertexData = new Float32Array([
             -1.0,  1.0,
@@ -147,6 +157,7 @@ export const WebGLRenderer = ({
         ]);
         const positionAttr = createAttribute("position", vertexData, program, gl);
 
+        // Create out uv data and give it to the shaders as an attribute
         /* prettier-ignore */
         const uvData = new Float32Array([
             0.0,  0.0,
@@ -156,12 +167,15 @@ export const WebGLRenderer = ({
         ]);
         const uvAttr = createAttribute("uv", uvData, program, gl);
 
+        // update our ref that stores the drawprops, which is used above in the animation hook
         drawProps.current = initialSketchProps as WebGLDrawProps;
         uniformsRef.current = uniforms;
 
+        // update our ref that stores the drawFucntion, which will be called in each frame of the animation
         drawFunction.current = currentDrawProps => {
             onFrame?.(currentDrawProps);
 
+            // update our uniforms
             createdUniforms.forEach(({ key, handle, type }) => {
                 const newValue = uniformsRef.current[key].value;
                 setUniform(handle, newValue, type, gl);
@@ -170,10 +184,15 @@ export const WebGLRenderer = ({
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         };
 
+        // Fix for intermittent lack of rendering on Safari & iOS
         /* prettier-ignore */
-        setTimeout(() => { canvas.width += 1; canvas.width -= 1; }, 1); // Fix for intermittent lack of rendering on Safari/iOS
+        setTimeout(() => {
+            canvas.width += 1;
+            canvas.width -= 1;
+        }, 1);
 
         return () => {
+            // cleanup our context
             gl.deleteBuffer(positionAttr.buffer);
             gl.disableVertexAttribArray(positionAttr.handle);
             gl.deleteBuffer(uvAttr.buffer);
@@ -182,6 +201,7 @@ export const WebGLRenderer = ({
     }, [setupSketch, settings, width, height, defaultVert, defaultFrag]);
 
     useEffect(
+        // on component unmount, fully lose the gl context
         () => () => {
             const gl = drawProps.current.gl;
             gl.canvas.width = 1;
