@@ -23,7 +23,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const initialPlaybackSpeed = inGaussian(0.69, 0.015) * 0.0001;
     let playbackSpeed = initialPlaybackSpeed;
 
-    const mouseLerpSpeed = inGaussian(1, 0.15) * 0.0015;
+    const mouseLerpSpeed = inGaussian(1, 0.12) * 0.0011;
 
     return {
         uniforms: {
