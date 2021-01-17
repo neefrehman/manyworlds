@@ -20,10 +20,10 @@ import {
 const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const idleMousePosition = inSquare(width, height);
 
-    const initialPlaybackSpeed = inGaussian(0.62, 0.015) * 0.0001;
+    const initialPlaybackSpeed = inGaussian(0.62, 0.01) * 0.0001;
     let playbackSpeed = initialPlaybackSpeed;
 
-    const mouseLerpSpeed = inGaussian(0.86, 0.1) * 0.001;
+    const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
 
     return {
         uniforms: {
@@ -33,13 +33,13 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
             bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
-            colorBrightness: { value: inRange(0.58, 0.76), type: "1f" },
+            colorBrightness: { value: inRange(0.62, 0.78), type: "1f" },
             color1: { value: hexToVec3(createRandomHex()), type: "3f" },
             color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
             noiseStyle: { value: pick([0, 1, 2, 3, 4, 5, 6, 7]), type: "1i" },
             noiseRotationSpeed: {
-                value: inRange(0.6, 0.9) * createSign(),
+                value: inRange(0.6, 1) * createSign(),
                 type: "1f",
             },
             sinNoiseScale: { value: inRange(5, 12), type: "1f" },
@@ -75,9 +75,9 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             },
             shapeRotationVector: {
                 value: [
-                    inBeta(12, 1) * createSign(),
-                    inBeta(12, 1) * createSign(),
-                    inBeta(12, 1) * createSign(),
+                    inBeta(11, 1) * createSign(),
+                    inBeta(11, 1) * createSign(),
+                    inBeta(11, 1) * createSign(),
                 ],
                 type: "3f",
             },
@@ -175,7 +175,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                     // inverted volume with simplex field — 150121
                     return min(
                         sin(pos.x) + sin(pos.y) + sin(pos.z) * 9.0,
-                        noise(vec4(pos * simplexNoiseScale * 0.94, time * 10.75)) * simplexIntensity
+                        noise(vec4(pos * simplexNoiseScale * 0.94, time * 8.4)) * simplexIntensity
                     );
                 } else if (noiseStyle == 7) {
                     // inverted volume with stretched simplex field — 180121
@@ -185,14 +185,14 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                             pos.x * stretchedSimplexNoiseScale.x,
                             pos.y * stretchedSimplexNoiseScale.y,
                             pos.x * stretchedSimplexNoiseScale.z,
-                            time * 8.0
+                            time * 7.4
                         )) * simplexIntensity
                     );
                 }
             }
 
             float sdf(vec3 pos) {
-                vec3 p1 = rotate(vec3(pos + shapePositionOffset), shapeRotationVector, time * 0.76 * TAU);
+                vec3 p1 = rotate(vec3(pos + shapePositionOffset), shapeRotationVector, time * 0.8 * TAU);
 
                 float shape = 0.0;
 
@@ -268,7 +268,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 playbackSpeed = lerp(
                     playbackSpeed,
                     initialPlaybackSpeed * Math.min(60 / fps, 5),
-                    0.033
+                    0.05
                 );
             }
 
