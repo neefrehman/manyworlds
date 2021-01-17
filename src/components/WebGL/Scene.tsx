@@ -273,7 +273,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             );
         },
     };
-};;;
+};
 
 interface SceneProps {
     refreshState: {};
