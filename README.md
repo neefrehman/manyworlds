@@ -8,19 +8,22 @@ A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
 [Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. Nerdy inspirations include retro scifi book covers, and Starfleet HQ in Star Trek: Discovery.
 
-### Visit site: [manyworlds.neef.co](https://manyworlds.neef.co/)
+### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
 (The site is quite GPU intensive. Try running it in a smaller window if the framerate is low)
 
 ## Project setup
 
-This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact lifecycle methods to create and manage a WebGL context. The renderer accepts a function which returns shader [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string, and an `onFrame` callback used to update the uniforms and other attributes of the sketch. If you pass it all of these things you've made yourself a WebGL scene! The interfaces for the renderer and callback props can be found in the component's file.
+This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact hooks to create and manage a WebGL context. The renderer can accept shader [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string, and an `onFrame` callback used to update the uniforms and other attributes of the sketch. If you pass it all of these things you've made yourself a WebGL scene! The interfaces for the renderer and callback props can be found in the component's file.
 
-#### Tools:
-- [Preact](https://preactjs.com/) - React but far smaller
+### Tools
+
+- [Preact](https://preactjs.com/) — Teeny React-like library
 - [Snowpack](https://www.snowpack.dev/) — ESM-first build tool
 - [esbuild](https://esbuild.github.io/) — Blazing fast bundler
-- [glslify](https://github.com/glslify/glslify) — Enables imports of glsl from other files
+- [glslify](https://github.com/glslify/glslify) — Enables importing inside glsl
+
+### Getting Started
 
 To get started on your device, fork this repo and run `npm install && npm run start` to set up the (lightning fast, thanks to Snowpack) dev server.
 
