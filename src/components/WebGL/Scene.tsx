@@ -20,7 +20,7 @@ import {
 const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     const idleMousePosition = inSquare(width, height);
 
-    const initialPlaybackSpeed = inGaussian(0.63, 0.015) * 0.0001;
+    const initialPlaybackSpeed = inGaussian(0.65, 0.015) * 0.0001;
     let playbackSpeed = initialPlaybackSpeed;
 
     const mouseLerpSpeed = inGaussian(0.9, 0.12) * 0.001;
@@ -28,7 +28,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
     return {
         uniforms: {
             aspect: { value: aspect, type: "1f" },
-            time: { value: inRange(0, 500), type: "1f" },
+            time: { value: inRange(0, 999), type: "1f" },
             resolution: { value: [width, height], type: "2f" },
             mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
@@ -69,15 +69,15 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 value: [
                     inGaussian(0, 0.115) * aspect,
                     inGaussian(0, 0.115),
-                    (inBeta(1.8, 5) - 0.1) * 0.63,
+                    (inBeta(1.8, 5) - 0.1) * 0.57,
                 ],
                 type: "3f",
             },
-            shapeRotationOffset: {
+            shapeRotationVector: {
                 value: [
-                    inGaussian(0, 0.25),
-                    inGaussian(0, 0.25),
-                    inGaussian(0, 0.25),
+                    inBeta(12, 1) * createSign(),
+                    inBeta(12, 1) * createSign(),
+                    inBeta(12, 1) * createSign(),
                 ],
                 type: "3f",
             },
@@ -130,7 +130,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             uniform float shapeDimension2;
             uniform float shapeDimension3;
             uniform vec3 shapePositionOffset;
-            uniform vec3 shapeRotationOffset;
+            uniform vec3 shapeRotationVector;
 
             float sineNoise(vec3 pos) {
                 if (noiseStyle == 0) {
@@ -192,7 +192,7 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             }
 
             float sdf(vec3 pos) {
-                vec3 p1 = rotate(vec3(pos + shapePositionOffset), vec3(1.0, 1.0, 1.0) - shapeRotationOffset, time * 0.7 * TAU);
+                vec3 p1 = rotate(vec3(pos + shapePositionOffset), shapeRotationVector, time * 0.76 * TAU);
 
                 float shape = 0.0;
 
@@ -201,7 +201,6 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 } else if (baseShape == 1) {
                     shape = sdEllipsoid(p1, vec3(shapeDimension1, shapeDimension2, shapeDimension3));
                 } else if (baseShape == 2) {
-                    p1 = rotate(pos, vec3(0.0, 1.0, 0.1), time * TAU);
                     shape = sdOctahedron(p1, shapeDimension1);
                 } else if (baseShape == 3) {
                     shape = sdTorus(p1, vec2(shapeDimension1, shapeDimension2));
@@ -265,13 +264,13 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
             }
         `,
         onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
-            playbackSpeed = lerp(
-                playbackSpeed,
-                fps < 40
-                    ? initialPlaybackSpeed * Math.min(60 / fps, 2.8)
-                    : initialPlaybackSpeed,
-                0.033
-            );
+            if (fps < 45) {
+                playbackSpeed = lerp(
+                    playbackSpeed,
+                    initialPlaybackSpeed * Math.min(60 / fps, 5),
+                    0.033
+                );
+            }
 
             uniforms.time.value += playbackSpeed;
 
