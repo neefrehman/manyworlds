@@ -18,8 +18,9 @@ import {
     pick,
 } from "../../utils/random";
 
-// createSketch is used to return the sketch function so I can pass in setIsLowFrameRate
-// from the component, and update preact state inside the `onFrame` callback.
+// the createSketch pattern is used to return the actual sketch function so
+// I can pass in the setIsLowFrameRate updater from the component, and update
+// preact state inside the `onFrame` callback.
 const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
     let lowFrameRateAlertHasBeenShown = false;
 
