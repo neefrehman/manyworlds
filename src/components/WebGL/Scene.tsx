@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { StateUpdater, useCallback } from "preact/hooks";
 import { memo } from "preact/compat";
 import glsl from "glslify";
 
@@ -17,72 +18,83 @@ import {
     pick,
 } from "../../utils/random";
 
-const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
-    const idleMousePosition = inSquare(width, height);
+// createSketch is used to return the sketch function so I can pass in the stateUpdater from the component
+const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
+    let lowFrameRateAlertHasBeenShown = false;
 
-    const initialPlaybackSpeed = inGaussian(0.62, 0.01) * 0.0001;
-    let playbackSpeed = initialPlaybackSpeed;
+    const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
+        const idleMousePosition = inSquare(width, height);
 
-    const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
+        const initialPlaybackSpeed = inGaussian(0.62, 0.01) * 0.0001;
+        let playbackSpeed = initialPlaybackSpeed;
 
-    return {
-        uniforms: {
-            aspect: { value: aspect, type: "1f" },
-            time: { value: inRange(0, 999), type: "1f" },
-            resolution: { value: [width, height], type: "2f" },
-            mousePosition: { value: [width / 2, height / 2], type: "2f" },
+        const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
 
-            bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
-            colorBrightness: { value: inRange(0.62, 0.78), type: "1f" },
-            color1: { value: hexToVec3(createRandomHex()), type: "3f" },
-            color2: { value: hexToVec3(createRandomHex()), type: "3f" },
+        return {
+            uniforms: {
+                aspect: { value: aspect, type: "1f" },
+                time: { value: inRange(0, 999), type: "1f" },
+                resolution: { value: [width, height], type: "2f" },
+                mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
-            noiseStyle: { value: pick([0, 1, 2, 3, 4, 5, 6, 7]), type: "1i" },
-            noiseRotationSpeed: {
-                value: inRange(0.6, 1) * createSign(),
-                type: "1f",
-            },
-            sinNoiseScale: { value: inRange(5, 12), type: "1f" },
-            sinScalar1: { value: inRange(0, 30), type: "1f" },
-            sinScalar2: { value: inRange(0, 5), type: "1f" },
-            scalarSwap: { value: createSign(0.6), type: "1i" },
-            simplexNoiseScale: { value: inRange(0.58, 0.67), type: "1f" },
-            stretchedSimplexNoiseScale: {
-                value: [inRange(0.4, 0.6), inRange(0.4, 0.6), inRange(0.4, 0.6)],
-                type: "3f",
-            },
-            highFrequencysimplexNoiseScale: {
-                value: 1.5 + inBeta(1, 3) * 48.5,
-                type: "1f",
-            },
-            simplexIntensity: { value: inRange(0.5, 4.3), type: "1f" },
-            grainIntensity: { value: inRange(0.005, 0.026), type: "1f" },
+                bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
+                colorBrightness: { value: inRange(0.62, 0.78), type: "1f" },
+                color1: { value: hexToVec3(createRandomHex()), type: "3f" },
+                color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
-            baseShape: {
-                value: inRange(0, 7, { isInteger: true }),
-                type: "1i",
+                noiseStyle: { value: pick([0, 1, 2, 3, 4, 5, 6, 7]), type: "1i" },
+                noiseRotationSpeed: {
+                    value: inRange(0.6, 1) * createSign(),
+                    type: "1f",
+                },
+                sinNoiseScale: { value: inRange(5, 12), type: "1f" },
+                sinScalar1: { value: inRange(0, 30), type: "1f" },
+                sinScalar2: { value: inRange(0, 5), type: "1f" },
+                scalarSwap: { value: createSign(0.6), type: "1i" },
+                simplexNoiseScale: { value: inRange(0.58, 0.67), type: "1f" },
+                stretchedSimplexNoiseScale: {
+                    value: [
+                        inRange(0.4, 0.6),
+
+                        inRange(0.4, 0.6),
+
+                        inRange(0.4, 0.6),
+                        ,
+                    ],
+                    type: "3f",
+                },
+                highFrequencysimplexNoiseScale: {
+                    value: 1.5 + inBeta(1, 3) * 48.5,
+                    type: "1f",
+                },
+                simplexIntensity: { value: inRange(0.5, 4.3), type: "1f" },
+                grainIntensity: { value: inRange(0.005, 0.026), type: "1f" },
+
+                baseShape: {
+                    value: inRange(0, 7, { isInteger: true }),
+                    type: "1i",
+                },
+                shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
+                shapeDimension2: { value: inRange(0.2, 0.35), type: "1f" },
+                shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
+                shapePositionOffset: {
+                    value: [
+                        inGaussian(0, 0.115) * aspect,
+                        inGaussian(0, 0.115),
+                        (inBeta(1.8, 5) - 0.1) * 0.57,
+                    ],
+                    type: "3f",
+                },
+                shapeRotationVector: {
+                    value: [
+                        inBeta(11, 1) * createSign(),
+                        inBeta(11, 1) * createSign(),
+                        inBeta(11, 1) * createSign(),
+                    ],
+                    type: "3f",
+                },
             },
-            shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
-            shapeDimension2: { value: inRange(0.2, 0.35), type: "1f" },
-            shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
-            shapePositionOffset: {
-                value: [
-                    inGaussian(0, 0.115) * aspect,
-                    inGaussian(0, 0.115),
-                    (inBeta(1.8, 5) - 0.1) * 0.57,
-                ],
-                type: "3f",
-            },
-            shapeRotationVector: {
-                value: [
-                    inBeta(11, 1) * createSign(),
-                    inBeta(11, 1) * createSign(),
-                    inBeta(11, 1) * createSign(),
-                ],
-                type: "3f",
-            },
-        },
-        frag: glsl`
+            frag: glsl`
             precision highp float;
 
             #pragma glslify: noise = require("glsl-noise/simplex/4d");
@@ -263,36 +275,58 @@ const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
                 gl_FragColor = vec4(color - grainAmount, 1.0);
             }
         `,
-        onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
-            if (fps < 45) {
-                playbackSpeed = lerp(
-                    playbackSpeed,
-                    initialPlaybackSpeed * Math.min(60 / fps, 5),
-                    0.05
+            onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
+                if (fps < 13 && !lowFrameRateAlertHasBeenShown) {
+                    setIsLowFrameRate(true);
+                    lowFrameRateAlertHasBeenShown = true;
+                }
+
+                if (fps < 45) {
+                    playbackSpeed = lerp(
+                        playbackSpeed,
+                        initialPlaybackSpeed * Math.min(60 / fps, 5),
+                        0.05
+                    );
+                }
+
+                uniforms.time.value += playbackSpeed;
+
+                uniforms.mousePosition.value = lerpVector(
+                    uniforms.mousePosition.value,
+                    mouseHasEntered ? mousePosition : idleMousePosition,
+                    mouseLerpSpeed
                 );
-            }
-
-            uniforms.time.value += playbackSpeed;
-
-            uniforms.mousePosition.value = lerpVector(
-                uniforms.mousePosition.value,
-                mouseHasEntered ? mousePosition : idleMousePosition,
-                mouseLerpSpeed
-            );
-        },
+            },
+        };
     };
+
+    return sketch;
 };
 
 interface SceneProps {
     refreshState: {};
+    setIsLowFrameRate: StateUpdater<boolean>;
 }
 
 export const Scene = memo(
-    ({ refreshState }: SceneProps) => {
+    ({ refreshState, setIsLowFrameRate }: SceneProps) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        let pixelation = parseFloat(urlParams.get("pixelation") ?? "1");
+        if (pixelation < 1) pixelation = 1;
+
+        const sketch = useCallback(createSketch(setIsLowFrameRate), [
+            setIsLowFrameRate,
+        ]);
+
         return (
             <WebGLRenderer
                 sketch={sketch}
-                settings={{ dimensions: [window.innerWidth, window.innerHeight] }}
+                settings={{
+                    dimensions: [
+                        window.innerWidth / pixelation,
+                        window.innerHeight / pixelation,
+                    ],
+                }}
             />
         );
     },

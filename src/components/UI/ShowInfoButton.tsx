@@ -40,7 +40,7 @@ export const ShowInfoButton = ({
 
             {infoIsVisible && (
                 <div
-                    className="uiButton infoModal"
+                    className="uiButton modal infoModal"
                     aria-describedBy="infoButton"
                     hidden={!infoIsVisible}
                 >

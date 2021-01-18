@@ -1,3 +1,5 @@
+/* Wrapper */
+
 .uiWrapper {
     --edgeButtonMargin: 1.4rem;
     position: fixed;
@@ -9,9 +11,11 @@
     justify-content: flex-start;
 }
 
-.uiWrapper >:not(:last-child) {
+.uiWrapper >:first-child {
     margin-right: 1rem;
 }
+
+/* Buttons */
 
 .uiButton {
     border: none;
@@ -33,12 +37,17 @@
     padding-right: 0.5rem;
 }
 
+/* Modals */
+
+.modal {
+    width: calc(100vw - (var(--edgeButtonMargin) * 2));
+    max-width: calc(500px - (var(--edgeButtonMargin) * 2));
+}
+
 .infoModal {
     position: fixed;
     bottom: var(--edgeButtonMargin);
     right: var(--edgeButtonMargin);
-    width: calc(100vw - (var(--edgeButtonMargin) * 2));
-    max-width: calc(500px - (var(--edgeButtonMargin) * 2));
     padding: 0.7rem 0.8rem;
 }
 
@@ -46,7 +55,35 @@
     margin-bottom: 0.8rem;
 }
 
-.uiButton:not(.infoModal):hover, .infoModal a:hover {
+.lowFrameRateModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1.2rem 1.2rem;
+    background-color: rgba(100, 100, 100, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lowFrameRateModal .buttonContainer {
+    margin-top: 1rem;
+}
+
+.lowFrameRateModal .buttonContainer a {
+    text-decoration: none;
+}
+
+.lowFrameRateModal .buttonContainer a:hover {
+    background-color: initial;
+}
+
+.lowFrameRateModal .buttonContainer button:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.uiButton:not(.modal):hover, .modal a:hover {
     background-color: rgba(255, 255, 255, 0.25);
 }
 
@@ -62,7 +99,7 @@
         margin: 0;
     }
 
-    .uiButton:not(.infoModal) {
+    .uiButton:not(.modal) {
         padding: 0.16rem 0.47rem;
         font-size: 0.885rem;
     }
