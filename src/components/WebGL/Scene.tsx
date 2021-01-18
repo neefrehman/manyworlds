@@ -27,7 +27,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
     const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
         const idleMousePosition = inSquare(width, height);
 
-        const initialPlaybackSpeed = inGaussian(0.62, 0.01) * 0.0001;
+        const initialPlaybackSpeed = inGaussian(0.62, 0.012) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
         const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;

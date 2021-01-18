@@ -10,8 +10,6 @@ A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
 ### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
-(The site is quite GPU intensive. Try running it in a smaller window if the framerate is low)
-
 ## Project setup
 
 This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact hooks to create and manage a WebGL context. The renderer can accept shader [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string, and an `onFrame` callback used to update the uniforms and other attributes of the sketch. The interfaces for the renderer and callback props can be found in the component's file.
