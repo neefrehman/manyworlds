@@ -25,7 +25,7 @@ export const LowFrameRateWarning = ({
                 <button className="uiButton">
                     <a
                         href={`/?pixelation=${
-                            parseFloat(currentPixelation) + 0.3
+                            parseFloat(currentPixelation) + 0.25
                         }`}
                     >
                         pixelate
