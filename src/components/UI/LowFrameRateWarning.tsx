@@ -16,10 +16,10 @@ export const LowFrameRateWarning = ({
     return (
         <div className="uiButton modal lowFrameRateModal">
             <p>
-                It looks like the page is {isAlreadyPixelated ? "still " : null}
-                running {isAlreadyPixelated ? "a bit " : null} slowly. For a
+                it looks like this page is {isAlreadyPixelated ? "still " : null}
+                running {isAlreadyPixelated ? "a bit " : null} slowly. for a
                 smoother framerate, try refreshing the site in a smaller window, or
-                run a {isAlreadyPixelated ? "slightly more" : null} pixelated
+                run a slightly {isAlreadyPixelated ? "more" : null} pixelated
                 version of the the animation.
             </p>
             <div className="buttonContainer">
@@ -37,7 +37,7 @@ export const LowFrameRateWarning = ({
                     className="uiButton"
                     onClick={() => setIsLowFrameRate(false)}
                 >
-                    OK
+                    dismiss
                 </button>
             </div>
         </div>
