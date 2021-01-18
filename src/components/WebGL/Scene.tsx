@@ -276,7 +276,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             }
         `,
             onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
-                if (fps < 13 && !lowFrameRateAlertHasBeenShown) {
+                if (fps < 12 && !lowFrameRateAlertHasBeenShown) {
                     setIsLowFrameRate(true);
                     lowFrameRateAlertHasBeenShown = true;
                 }
