@@ -54,7 +54,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "2f",
                 },
 
-                bgBrightness: { value: inBeta(1, 4) * 0.076, type: "1f" },
+                bgBrightness: { value: inBeta(1, 4) * 0.075, type: "1f" },
                 colorBrightness: { value: inRange(0.63, 0.77), type: "1f" },
                 color1: { value: hexToVec3(createRandomHex()), type: "3f" },
                 color2: { value: hexToVec3(createRandomHex()), type: "3f" },
