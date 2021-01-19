@@ -80,7 +80,7 @@ export const createAttribute = (
  */
 export const setUniform = (
     location: WebGLUniformLocation,
-    value: any, // TODO: UniformValue type - use same type guards as above, or is there a better way?
+    value: any,
     type: string,
     gl: GLContext
 ): void => {
