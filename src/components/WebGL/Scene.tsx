@@ -41,7 +41,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         // uniforms can't be used in a loop index comparison in glsl. So instead
         // I'm using string replacement with this variable at the end of the `glsl` call.
         // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
-        const drawDistance = Math.max(Math.round(inBeta(1.015, 1) * 224), 14);
+        const drawDistance = Math.max(Math.round(inBeta(1.045, 1) * 256), 14);
 
         return {
             uniforms: {
