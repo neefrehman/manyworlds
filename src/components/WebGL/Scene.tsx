@@ -27,10 +27,15 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
     const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
         const idleMousePosition = inSquare(width, height);
 
-        const initialPlaybackSpeed = inGaussian(0.62, 0.015) * 0.0001;
+        const initialPlaybackSpeed = inGaussian(0.62, 0.018) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
         const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
+
+        // uniforms can't be used in a loop index comparison in glsl. So instead
+        // I'm using string replacement with this variable at the end of the `glsl` call.
+        // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
+        const drawDistance = Math.max(Math.round(inBeta(1.02, 1) * 224), 14);
 
         return {
             uniforms: {
@@ -39,8 +44,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 resolution: { value: [width, height], type: "2f" },
                 mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
-                bgBrightness: { value: inBeta(1, 3) * 0.08, type: "1f" },
-                colorBrightness: { value: inRange(0.62, 0.78), type: "1f" },
+                bgBrightness: { value: inBeta(1, 4) * 0.078, type: "1f" },
+                colorBrightness: { value: inRange(0.64, 0.78), type: "1f" },
                 color1: { value: hexToVec3(createRandomHex()), type: "3f" },
                 color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
@@ -60,11 +65,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 stretchedSimplexNoiseScale: {
                     value: [
                         inRange(0.4, 0.6),
-
                         inRange(0.4, 0.6),
-
                         inRange(0.4, 0.6),
-                        ,
                     ],
                     type: "3f",
                 },
@@ -258,12 +260,12 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
 
                 vec3 finalColor = vec3(bgBrightness);
 
-                for (int i = 0; i <= 256; i++) {
+                for (int i = 0; i <= $DRAW_DISTANCE; i++) {
                     curDist = sdf(currentRayPos);
                     rayLength +=  0.536 * curDist;
                     currentRayPos = camPos + ray * rayLength;
                     
-                    if (curDist < 0.001 || curDist > 2.2) {
+                    if (curDist < 0.0001 || curDist > 2.02) {
                         break;
                     }
 
@@ -279,7 +281,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 float grainAmount = filmGrain(vUv * time) * grainIntensity;
                 gl_FragColor = vec4(color - grainAmount, 1.0);
             }
-        `,
+            `.replace("$DRAW_DISTANCE", drawDistance.toString()),
             onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
                 if (fps < 14 && !lowFrameRateAlertHasBeenShown) {
                     setIsLowFrameRate(true);
