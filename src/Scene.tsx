@@ -98,7 +98,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: [
                         inGaussian(0, 0.3),
                         inGaussian(0, 0.3),
-                        clamp(-1.05, inGaussian(0, 0.52), 0.33),
+                        clamp(-1.05, inGaussian(0, 0.55), 0.33),
                     ],
                     type: "3f",
                 },
