@@ -1,15 +1,15 @@
 import { h } from "preact";
 import { useState } from "preact/hooks";
 
-import { SceneWrapper, Scene } from "./components/WebGL";
 import {
     UIWrapper,
     ShowInfoButton,
     RefreshButton,
     LowFrameRateWarning,
 } from "./components/UI";
-import "./components/WebGL/styles.css";
-import "./components/UI/styles.css";
+
+import { Scene } from "./Scene";
+import "./styles.css";
 
 const App = () => {
     const [uiIsShown] = useState(!window.location.search.includes("no-ui"));
@@ -21,9 +21,7 @@ const App = () => {
         <main>
             {uiIsShown && (
                 <UIWrapper>
-                    <RefreshButton
-                        onClick={() => forceRefresh({})}
-                    />
+                    <RefreshButton onClick={() => forceRefresh({})} />
                     <ShowInfoButton
                         infoIsVisible={infoIsVisible}
                         setInfoIsVisible={setInfoIsVisible}
@@ -36,12 +34,12 @@ const App = () => {
                 </UIWrapper>
             )}
 
-            <SceneWrapper onClick={() => setInfoIsVisible(false)}>
+            <div onClick={() => setInfoIsVisible(false)}>
                 <Scene
                     refreshState={refreshState}
                     setIsLowFrameRate={setIsLowFrameRate}
                 />
-            </SceneWrapper>
+            </div>
         </main>
     );
 };

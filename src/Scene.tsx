@@ -3,11 +3,11 @@ import { StateUpdater, useCallback } from "preact/hooks";
 import { memo } from "preact/compat";
 import glsl from "glslify";
 
-import type { WebGLSetupFn } from "./Renderer";
-import { WebGLRenderer } from "./Renderer";
+import type { WebGLSetupFn } from "./components/WebGL";
+import { WebGLRenderer } from "./components/WebGL";
 
-import { hexToVec3 } from "../../utils/glsl/hexToVec3";
-import { lerp, lerpVector } from "../../utils/math";
+import { hexToVec3 } from "./utils/glsl/hexToVec3";
+import { lerp, lerpVector } from "./utils/math";
 import {
     createRandomHex,
     createSign,
@@ -16,7 +16,7 @@ import {
     inRange,
     inSquare,
     pick,
-} from "../../utils/random";
+} from "./utils/random";
 
 const urlParams = new URLSearchParams(window.location.search);
 let pixelation = parseFloat(urlParams.get("pixelation") ?? "1");
@@ -114,17 +114,17 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             precision highp float;
 
             #pragma glslify: noise = require("glsl-noise/simplex/4d");
-            #pragma glslify: rotate = require("../../utils/glsl/rotate.glsl");
-            #pragma glslify: filmGrain = require("../../utils/glsl/grain.glsl");
+            #pragma glslify: rotate = require("./utils/glsl/rotate.glsl");
+            #pragma glslify: filmGrain = require("./utils/glsl/grain.glsl");
 
-            #pragma glslify: sdEllipsoid = require("../../utils/glsl/sdShapes/sdEllipsoid.glsl");
-            #pragma glslify: sdSphere = require("../../utils/glsl/sdShapes/sdSphere.glsl");
-            #pragma glslify: sdCuboid = require("../../utils/glsl/sdShapes/sdCuboid.glsl");
-            #pragma glslify: sdOctahedron = require("../../utils/glsl/sdShapes/sdOctahedron.glsl");
-            #pragma glslify: sdTorus = require("../../utils/glsl/sdShapes/sdTorus.glsl");
-            #pragma glslify: sdCone = require("../../utils/glsl/sdShapes/sdCone.glsl");
-            #pragma glslify: sdCappedCone = require("../../utils/glsl/sdShapes/sdCappedCone.glsl");
-            #pragma glslify: sdPyramid = require("../../utils/glsl/sdShapes/sdPyramid.glsl");
+            #pragma glslify: sdEllipsoid = require("./utils/glsl/sdShapes/sdEllipsoid.glsl");
+            #pragma glslify: sdSphere = require("./utils/glsl/sdShapes/sdSphere.glsl");
+            #pragma glslify: sdCuboid = require("./utils/glsl/sdShapes/sdCuboid.glsl");
+            #pragma glslify: sdOctahedron = require("./utils/glsl/sdShapes/sdOctahedron.glsl");
+            #pragma glslify: sdTorus = require("./utils/glsl/sdShapes/sdTorus.glsl");
+            #pragma glslify: sdCone = require("./utils/glsl/sdShapes/sdCone.glsl");
+            #pragma glslify: sdCappedCone = require("./utils/glsl/sdShapes/sdCappedCone.glsl");
+            #pragma glslify: sdPyramid = require("./utils/glsl/sdShapes/sdPyramid.glsl");
 
             #define PI 3.14159
             #define TAU 2.0 * PI

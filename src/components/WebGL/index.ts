@@ -1,2 +1,2 @@
-export { Scene } from "./Scene";
-export { SceneWrapper } from "./SceneWrapper";
+export { WebGLRenderer } from "./Renderer";
+export type { WebGLSetupFn } from "./Renderer";
