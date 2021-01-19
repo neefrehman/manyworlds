@@ -32,11 +32,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const actualWidth = width * pixelation;
         const actualHeight = height * pixelation;
 
-        const idleMousePosition = inSquare(actualWidth, actualHeight);
-
         const initialPlaybackSpeed = inGaussian(0.62, 0.018) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
+        const idleMousePosition = inSquare(actualWidth, actualHeight);
         const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
 
         // uniforms can't be used in a loop index comparison in glsl. So instead
