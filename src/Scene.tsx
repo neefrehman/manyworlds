@@ -292,7 +292,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             }
             `.replace("$DRAW_DISTANCE", drawDistance.toString()),
             onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
-                if (fps <= 13.5 && !lowFrameRateAlertHasBeenShown) {
+                if (fps < 14 && !lowFrameRateAlertHasBeenShown) {
                     setIsLowFrameRate(true);
                     lowFrameRateAlertHasBeenShown = true;
                 }
