@@ -44,8 +44,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 resolution: { value: [width, height], type: "2f" },
                 mousePosition: { value: [width / 2, height / 2], type: "2f" },
 
-                bgBrightness: { value: inBeta(1, 4) * 0.078, type: "1f" },
-                colorBrightness: { value: inRange(0.64, 0.78), type: "1f" },
+                bgBrightness: { value: inBeta(1, 4) * 0.076, type: "1f" },
+                colorBrightness: { value: inRange(0.63, 0.77), type: "1f" },
                 color1: { value: hexToVec3(createRandomHex()), type: "3f" },
                 color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
