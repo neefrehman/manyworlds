@@ -7,7 +7,7 @@ import type { WebGLSetupFn } from "./components/WebGL";
 import { WebGLRenderer } from "./components/WebGL";
 
 import { hexToVec3 } from "./utils/glsl/hexToVec3";
-import { lerp, lerpVector } from "./utils/math";
+import { clamp, lerp, lerpVector } from "./utils/math";
 import {
     createRandomHex,
     createSign,
@@ -41,7 +41,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         // uniforms can't be used in a loop index comparison in glsl. So instead
         // I'm using string replacement with this variable at the end of the `glsl` call.
         // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
-        const drawDistance = Math.max(Math.round(inBeta(1.045, 1) * 256), 14);
+        const drawDistance = Math.max(Math.round(inBeta(1.07, 1) * 256), 14);
 
         return {
             uniforms: {
@@ -95,9 +95,9 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
                 shapePositionOffset: {
                     value: [
-                        inGaussian(0, 0.17) * aspect,
-                        inGaussian(0, 0.17),
-                        (inBeta(1.8, 5) - 0.12) * 0.57,
+                        inGaussian(0, 0.3),
+                        inGaussian(0, 0.3),
+                        clamp(-1.05, inGaussian(0, 0.6), 0.33),
                     ],
                     type: "3f",
                 },
