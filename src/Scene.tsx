@@ -1,5 +1,6 @@
 import { h } from "preact";
-import { StateUpdater, useCallback } from "preact/hooks";
+import { useCallback } from "preact/hooks";
+import type { StateUpdater } from "preact/hooks";
 import { memo } from "preact/compat";
 import glsl from "glslify";
 
