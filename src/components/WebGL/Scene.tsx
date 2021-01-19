@@ -35,7 +35,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         // uniforms can't be used in a loop index comparison in glsl. So instead
         // I'm using string replacement with this variable at the end of the `glsl` call.
         // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
-        const drawDistance = Math.max(Math.round(inBeta(1.02, 1) * 224), 14);
+        const drawDistance = Math.max(Math.round(inBeta(1.015, 1) * 224), 14);
 
         return {
             uniforms: {
@@ -86,9 +86,9 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
                 shapePositionOffset: {
                     value: [
-                        inGaussian(0, 0.115) * aspect,
-                        inGaussian(0, 0.115),
-                        (inBeta(1.8, 5) - 0.1) * 0.57,
+                        inGaussian(0, 0.17) * aspect,
+                        inGaussian(0, 0.17),
+                        (inBeta(1.8, 5) - 0.12) * 0.57,
                     ],
                     type: "3f",
                 },
@@ -283,7 +283,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             }
             `.replace("$DRAW_DISTANCE", drawDistance.toString()),
             onFrame: ({ uniforms, mousePosition, mouseHasEntered, fps }) => {
-                if (fps < 14 && !lowFrameRateAlertHasBeenShown) {
+                if (fps <= 13.5 && !lowFrameRateAlertHasBeenShown) {
                     setIsLowFrameRate(true);
                     lowFrameRateAlertHasBeenShown = true;
                 }
