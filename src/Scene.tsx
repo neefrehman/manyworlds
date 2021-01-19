@@ -42,7 +42,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         // uniforms can't be used in a loop index comparison in glsl. So instead
         // I'm using string replacement with this variable at the end of the `glsl` call.
         // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
-        const drawDistance = Math.max(Math.round(inBeta(1.07, 1) * 256), 14);
+        const drawDistance = Math.max(Math.round(inBeta(1.11, 1) * 256), 14);
 
         return {
             uniforms: {
@@ -54,7 +54,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "2f",
                 },
 
-                bgBrightness: { value: inBeta(1, 4) * 0.075, type: "1f" },
+                bgBrightness: { value: inBeta(1, 4.5) * 0.072, type: "1f" },
                 colorBrightness: { value: inRange(0.63, 0.77), type: "1f" },
                 color1: { value: hexToVec3(createRandomHex()), type: "3f" },
                 color2: { value: hexToVec3(createRandomHex()), type: "3f" },
@@ -62,10 +62,6 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 noiseStyle: {
                     value: pick([0, 0, 1, 2, 3, 4, 5, 6, 7]),
                     type: "1i",
-                },
-                noiseRotationSpeed: {
-                    value: inRange(0.6, 1) * createSign(),
-                    type: "1f",
                 },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
                 sinScalar1: { value: inRange(0, 30), type: "1f" },
@@ -85,6 +81,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "1f",
                 },
                 simplexIntensity: { value: inRange(0.5, 4.3), type: "1f" },
+                noiseRotationSpeed: {
+                    value: inRange(0.6, 1) * createSign(),
+                    type: "1f",
+                },
                 grainIntensity: { value: inRange(0.005, 0.026), type: "1f" },
 
                 baseShape: {
@@ -98,7 +98,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: [
                         inGaussian(0, 0.3),
                         inGaussian(0, 0.3),
-                        clamp(-1, inGaussian(0, 0.55), 0.33),
+                        clamp(-0.95, inGaussian(0, 0.55), 0.33),
                     ],
                     type: "3f",
                 },
@@ -109,6 +109,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                         inBeta(11, 1) * createSign(),
                     ],
                     type: "3f",
+                },
+                shapeRotationSpeed: {
+                    value: inGaussian(0.8, 0.01) * createSign(),
+                    type: "1f",
                 },
             },
             frag: glsl`
@@ -143,7 +147,6 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             uniform vec3 color2;
 
             uniform int noiseStyle;
-            uniform float noiseRotationSpeed;
             uniform float sinNoiseScale;
             uniform float sinScalar1;
             uniform float sinScalar2;
@@ -152,6 +155,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             uniform vec3 stretchedSimplexNoiseScale;
             uniform float highFrequencysimplexNoiseScale;
             uniform float simplexIntensity;
+            uniform float noiseRotationSpeed;
             uniform float grainIntensity;
 
             uniform int baseShape;
@@ -160,8 +164,9 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             uniform float shapeDimension3;
             uniform vec3 shapePositionOffset;
             uniform vec3 shapeRotationVector;
+            uniform float shapeRotationSpeed;
 
-            float sineNoise(vec3 pos) {
+            float getNoise(vec3 pos) {
                 if (noiseStyle == 0) {
                     // additive - sin & simplex — 150121
                     return
@@ -171,7 +176,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     // comparative - sin & simplex — 150121
                     return max(
                         sin(pos.x * 1.96) + sin(pos.y * 1.96) + (sin(pos.z * 1.96) * sinNoiseScale),
-                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 7.6)) * simplexIntensity)
+                        ( sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale)
+                          + noise(vec4(pos * simplexNoiseScale, time * 7.6)) * simplexIntensity )
                     );
                 } else if (noiseStyle == 2) {
                     // comparative - high sin field differential — 170121
@@ -179,7 +185,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     float scalar2 = scalarSwap == 1 ? sinScalar2 : sinScalar1;
                     return max(
                         sin(pos.x * scalar1) + sin(pos.y * scalar1) + (sin(pos.z * scalar1) * sinNoiseScale),
-                        sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 7.0)) * simplexIntensity)
+                        ( sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale)
+                          + noise(vec4(pos * simplexNoiseScale, time * 7.0)) * simplexIntensity )
                     );
                 } else if (noiseStyle == 3) {
                     // inverted comparison - high sin field differential — 170121
@@ -187,13 +194,15 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     float scalar2 = scalarSwap == 1 ? sinScalar2 : sinScalar1;
                     return min(
                         sin(pos.x * scalar1) + sin(pos.y * scalar1) + (sin(pos.z * scalar1) * sinNoiseScale),
-                        sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale) + (noise(vec4(pos * simplexNoiseScale, time * 8.0)) * simplexIntensity)
+                        ( sin(pos.x * scalar2) + sin(pos.y * scalar2) + (sin(pos.z * scalar2) * sinNoiseScale)
+                          + noise(vec4(pos * simplexNoiseScale, time * 8.0)) * simplexIntensity )
                     );
                 } else if (noiseStyle == 4) {
                     // comparative - high simplex field frequency — 160121
                     return max(
                         sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale),
-                        sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale) + (noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.7)) * simplexIntensity * 2.0)
+                        ( sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale)
+                          + noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.7)) * simplexIntensity * 2.0 )
                     );
                 } else if (noiseStyle == 5) {
                     // additive - high simplex field frequency — 160121
@@ -221,33 +230,42 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             }
 
             float sdf(vec3 pos) {
-                vec3 p1 = rotate(vec3(pos + shapePositionOffset), shapeRotationVector, time * 0.8 * TAU);
+                vec3 shapePosition = rotate(
+                    vec3(pos + shapePositionOffset),
+                    shapeRotationVector,
+                    time * shapeRotationSpeed * TAU
+                );
 
                 float shape = 0.0;
 
                 if (baseShape == 0) {
-                    shape = sdSphere(p1, shapeDimension1);
+                    shape = sdSphere(shapePosition, shapeDimension1);
                 } else if (baseShape == 1) {
-                    shape = sdEllipsoid(p1, vec3(shapeDimension1, shapeDimension2, shapeDimension3));
+                    shape = sdEllipsoid(shapePosition, vec3(shapeDimension1, shapeDimension2, shapeDimension3));
                 } else if (baseShape == 2) {
-                    shape = sdOctahedron(p1, shapeDimension1);
+                    shape = sdOctahedron(shapePosition, shapeDimension1);
                 } else if (baseShape == 3) {
-                    shape = sdTorus(p1, vec2(shapeDimension1, shapeDimension2));
+                    shape = sdTorus(shapePosition, vec2(shapeDimension1, shapeDimension2));
                 } else if (baseShape == 4) {
-                    shape = sdCappedCone(p1, shapeDimension1, shapeDimension3, shapeDimension2);
+                    shape = sdCappedCone(shapePosition, shapeDimension1, shapeDimension3, shapeDimension2);
                 } else if (baseShape == 5) {
-                    shape = sdPyramid(p1, shapeDimension1);
+                    shape = sdPyramid(shapePosition, shapeDimension1);
                 } else if (baseShape == 6) {
-                    p1 -= vec3(0.2, 0.2, 0.0);
-                    shape = sdCone(p1, vec2(shapeDimension3, shapeDimension2), shapeDimension1);
+                    shapePosition -= vec3(0.2, 0.2, 0.0);
+                    shape = sdCone(shapePosition, vec2(shapeDimension3, shapeDimension2), shapeDimension1);
                 } else if (baseShape == 7) {
-                    shape = sdCuboid(p1, vec3(shapeDimension1 * 0.88));
+                    shape = sdCuboid(shapePosition, vec3(shapeDimension1 * 0.88));
                 }
                 
-                vec3 p2 = rotate(pos, vec3(mousePosition / resolution, 1.0), -time * noiseRotationSpeed);
-                float sineNoiseValue = (0.83 - sineNoise((p2 + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
+                vec3 noisePosition = rotate(
+                    pos,
+                    vec3(mousePosition / resolution, 1.0),
+                    -time * noiseRotationSpeed
+                );
 
-                return max(shape, sineNoiseValue);
+                float noiseField = (0.83 - getNoise((noisePosition + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
+
+                return max(shape, noiseField);
             }
 
             vec3 getColor(vec3 pos) {
@@ -275,7 +293,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     rayLength +=  0.536 * curDist;
                     currentRayPos = camPos + ray * rayLength;
                     
-                    if (curDist < 0.0001 || curDist > 2.02) {
+                    if (curDist < 0.0001 || curDist > 2.2) {
                         break;
                     }
 
