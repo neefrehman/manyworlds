@@ -44,7 +44,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 color1: { value: hexToVec3(createRandomHex()), type: "3f" },
                 color2: { value: hexToVec3(createRandomHex()), type: "3f" },
 
-                noiseStyle: { value: pick([0, 1, 2, 3, 4, 5, 6, 7]), type: "1i" },
+                noiseStyle: {
+                    value: pick([0, 0, 1, 2, 3, 4, 5, 6, 7]),
+                    type: "1i",
+                },
                 noiseRotationSpeed: {
                     value: inRange(0.6, 1) * createSign(),
                     type: "1f",
