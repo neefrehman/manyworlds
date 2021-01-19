@@ -18,6 +18,10 @@ import {
     pick,
 } from "../../utils/random";
 
+const urlParams = new URLSearchParams(window.location.search);
+let pixelation = parseFloat(urlParams.get("pixelation") ?? "1");
+if (pixelation < 1) pixelation = 1;
+
 // the createSketch pattern is used to return the actual sketch function so
 // I can pass in the setIsLowFrameRate updater from the component, and update
 // preact state inside the `onFrame` callback.
@@ -25,7 +29,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
     let lowFrameRateAlertHasBeenShown = false;
 
     const sketch: WebGLSetupFn = ({ width, height, aspect }) => {
-        const idleMousePosition = inSquare(width, height);
+        const actualWidth = width * pixelation;
+        const actualHeight = height * pixelation;
+
+        const idleMousePosition = inSquare(actualWidth, actualHeight);
 
         const initialPlaybackSpeed = inGaussian(0.62, 0.018) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
@@ -41,8 +48,11 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
             uniforms: {
                 aspect: { value: aspect, type: "1f" },
                 time: { value: inRange(0, 999), type: "1f" },
-                resolution: { value: [width, height], type: "2f" },
-                mousePosition: { value: [width / 2, height / 2], type: "2f" },
+                resolution: { value: [actualWidth, actualHeight], type: "2f" },
+                mousePosition: {
+                    value: [actualWidth / 2, actualHeight / 2],
+                    type: "2f",
+                },
 
                 bgBrightness: { value: inBeta(1, 4) * 0.076, type: "1f" },
                 colorBrightness: { value: inRange(0.63, 0.77), type: "1f" },
@@ -317,10 +327,6 @@ interface SceneProps {
 
 export const Scene = memo(
     ({ refreshState, setIsLowFrameRate }: SceneProps) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        let pixelation = parseFloat(urlParams.get("pixelation") ?? "1");
-        if (pixelation < 1) pixelation = 1;
-
         const sketch = useCallback(createSketch(setIsLowFrameRate), [
             setIsLowFrameRate,
         ]);
