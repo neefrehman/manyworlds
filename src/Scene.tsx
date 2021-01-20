@@ -39,9 +39,9 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const idleMousePosition = inSquare(actualWidth, actualHeight);
         const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
 
-        // uniforms can't be used for a loop index comparison in glsl. So instead
-        // I'm using string replacement with this variable at the end of the `frag` glsl string.
-        // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
+        // uniforms can't be used for a loop index comparison in glsl: https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
+        // instead, i'm  using js to replace "$DRAW_DISTANCE" in the shader
+        // with the below variable, at the end of the `frag` glsl string.
         const drawDistance = Math.max(Math.round(inBeta(1.11, 1) * 256), 14);
 
         return {
