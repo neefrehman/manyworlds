@@ -23,7 +23,7 @@ const urlParams = new URLSearchParams(window.location.search);
 let pixelation = parseFloat(urlParams.get("pixelation") ?? "1");
 if (pixelation < 1) pixelation = 1;
 
-// the createSketch pattern is used to return the actual sketch function so
+// the createSketch pattern is used to return the actual sketch function, so that
 // I can pass in the setIsLowFrameRate updater from the component, and update
 // preact state inside the `onFrame` callback.
 const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
@@ -39,8 +39,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const idleMousePosition = inSquare(actualWidth, actualHeight);
         const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
 
-        // uniforms can't be used in a loop index comparison in glsl. So instead
-        // I'm using string replacement with this variable at the end of the `glsl` call.
+        // uniforms can't be used for a loop index comparison in glsl. So instead
+        // I'm using string replacement with this variable at the end of the `frag` glsl string.
         // https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
         const drawDistance = Math.max(Math.round(inBeta(1.11, 1) * 256), 14);
 
@@ -263,7 +263,9 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     -time * noiseRotationSpeed
                 );
 
-                float noiseField = (0.83 - getNoise((noisePosition + vec3(0.0, 0.2, 0.0)) * sinNoiseScale)) / sinNoiseScale;
+                float noiseField = 
+                    (0.83 - getNoise((noisePosition + vec3(0.0, 0.2, 0.0)) * sinNoiseScale))
+                    / sinNoiseScale;
 
                 return max(shape, noiseField);
             }
