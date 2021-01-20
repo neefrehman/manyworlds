@@ -1,5 +1,4 @@
 import { h } from "preact";
-import { useState } from "preact/hooks";
 import type { StateUpdater } from "preact/hooks";
 
 interface LowFrameRateWarningProps {

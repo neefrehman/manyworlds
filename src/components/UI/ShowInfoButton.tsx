@@ -1,31 +1,44 @@
 import { h } from "preact";
-import { useEffect } from "preact/hooks";
-import type { StateUpdater } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
-interface ShowInfoButtonProps {
-    infoIsVisible: boolean;
-    setInfoIsVisible: StateUpdater<boolean>;
-}
+export const ShowInfoButton = () => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
+    const [infoIsVisible, setInfoIsVisible] = useState(false);
 
-export const ShowInfoButton = ({
-    infoIsVisible,
-    setInfoIsVisible,
-}: ShowInfoButtonProps) => {
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === "Escape") setInfoIsVisible(false);
         };
 
-        if (infoIsVisible) document.addEventListener("keydown", handleEscape);
+        const handleClickOutside = (event: any) => {
+            if (
+                buttonRef.current &&
+                modalRef.current &&
+                !modalRef.current.contains(event.target) &&
+                !buttonRef.current.contains(event.target)
+            ) {
+                setInfoIsVisible(false);
+            }
+        };
+
+        if (infoIsVisible) {
+            document.addEventListener("keydown", handleEscape);
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
+        }
 
         return () => {
             document.removeEventListener("keydown", handleEscape);
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
         };
-    }, [infoIsVisible]);
+    }, [modalRef, infoIsVisible]);
 
     return (
         <div>
             <button
+                ref={buttonRef}
                 id="infoButton"
                 className="uiButton infoButton"
                 aria-label="info"
@@ -40,6 +53,7 @@ export const ShowInfoButton = ({
 
             {infoIsVisible && (
                 <div
+                    ref={modalRef}
                     className="uiButton modal infoModal"
                     aria-describedBy="infoButton"
                     hidden={!infoIsVisible}

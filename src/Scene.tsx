@@ -37,7 +37,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         let playbackSpeed = initialPlaybackSpeed;
 
         const idleMousePosition = inSquare(actualWidth, actualHeight);
-        const mouseLerpSpeed = inGaussian(0.8, 0.1) * 0.001;
+        const mouseLerpSpeed = inGaussian(0.81, 0.12) * 0.001;
 
         // uniforms can't be used for a loop index comparison in glsl: https://www.khronos.org/webgl/public-mailing-list/public_webgl/1012/msg00063.php
         // instead, i'm using js to replace "$DRAW_DISTANCE" in the shader

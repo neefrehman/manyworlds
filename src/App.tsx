@@ -13,7 +13,6 @@ import "./styles.css";
 
 const App = () => {
     const [uiIsShown] = useState(!window.location.search.includes("no-ui"));
-    const [infoIsVisible, setInfoIsVisible] = useState(false);
     const [isLowFrameRate, setIsLowFrameRate] = useState(false);
     const [refreshState, forceRefresh] = useState({});
 
@@ -22,10 +21,7 @@ const App = () => {
             {uiIsShown && (
                 <UIWrapper>
                     <RefreshButton onClick={() => forceRefresh({})} />
-                    <ShowInfoButton
-                        infoIsVisible={infoIsVisible}
-                        setInfoIsVisible={setInfoIsVisible}
-                    />
+                    <ShowInfoButton />
                     {isLowFrameRate && (
                         <LowFrameRateWarning
                             setIsLowFrameRate={setIsLowFrameRate}
@@ -34,12 +30,10 @@ const App = () => {
                 </UIWrapper>
             )}
 
-            <div onClick={() => setInfoIsVisible(false)}>
-                <Scene
-                    refreshState={refreshState}
-                    setIsLowFrameRate={setIsLowFrameRate}
-                />
-            </div>
+            <Scene
+                refreshState={refreshState}
+                setIsLowFrameRate={setIsLowFrameRate}
+            />
         </main>
     );
 };
