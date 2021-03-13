@@ -1,5 +1,6 @@
 import { h } from "preact";
 import type { StateUpdater } from "preact/hooks";
+import { seed } from "../../utils/random";
 
 interface LowFrameRateWarningProps {
     setIsLowFrameRate: StateUpdater<boolean>;
@@ -13,7 +14,7 @@ export const LowFrameRateWarning = ({
     const isAlreadyPixelated = currentPixelation !== "1";
 
     return (
-        <div className="uiButton modal lowFrameRateModal">
+        <div className="uiButton modal centerModal">
             <p>
                 it looks like this page is {isAlreadyPixelated ? "still " : null}
                 running {isAlreadyPixelated ? "a bit " : null} slowly. for a
@@ -26,7 +27,7 @@ export const LowFrameRateWarning = ({
                     <a
                         href={`/?pixelation=${
                             parseFloat(currentPixelation) + 0.25
-                        }`}
+                        }&world=${seed}`}
                     >
                         pixelate
                         {isAlreadyPixelated ? " again" : null}

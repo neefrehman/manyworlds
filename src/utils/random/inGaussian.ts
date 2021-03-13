@@ -1,3 +1,5 @@
+import { seededRandom } from "./seededRandom";
+
 /**
  * Produces a random Gaussian (Normal) distribution. There is no minimum or maximum
  * value that might return. There is just a lower probability the further from the mean.
@@ -15,8 +17,8 @@ export const inGaussian = (mean = 0, standardDeviation = 1) => {
     let s = 0;
 
     do {
-        v1 = Math.random() * 2 - 1; // -1..1
-        v2 = Math.random() * 2 - 1; // -1..1
+        v1 = seededRandom() * 2 - 1; // -1..1
+        v2 = seededRandom() * 2 - 1; // -1..1
         s = v1 * v1 + v2 * v2;
     } while (s >= 1 || s === 0);
 

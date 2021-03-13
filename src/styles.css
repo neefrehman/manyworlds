@@ -13,9 +13,10 @@ canvas {
 /* UI */
 /* Wrapper */
 
-.uiWrapper {
+.uiWrapper, .modalWrapper {
     --edgeButtonMargin: 1.4rem;
     position: fixed;
+    z-index: 10;
     top: var(--edgeButtonMargin);
     right: var(--edgeButtonMargin);
     display: flex;
@@ -24,7 +25,7 @@ canvas {
     justify-content: flex-start;
 }
 
-.uiWrapper >:first-child {
+.uiWrapper :not(:last-child) {
     margin-right: 1rem;
 }
 
@@ -41,7 +42,7 @@ canvas {
     -webkit-backdrop-filter: blur(8px);
 }
 
-.refreshButton {
+.nudgeDown {
     margin-top: 1px;
 }
 
@@ -57,6 +58,10 @@ canvas {
     max-width: calc(500px - (var(--edgeButtonMargin) * 2));
 }
 
+.modal p:not(:last-child) {
+    margin-bottom: 0.8rem;
+}
+
 .infoModal {
     position: fixed;
     bottom: var(--edgeButtonMargin);
@@ -64,11 +69,7 @@ canvas {
     padding: 0.7rem 0.8rem;
 }
 
-.infoModal p:not(:last-child) {
-    margin-bottom: 0.8rem;
-}
-
-.lowFrameRateModal {
+.centerModal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -78,22 +79,36 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
 }
 
-.lowFrameRateModal .buttonContainer {
+.centerModal .buttonContainer {
     margin-top: 1rem;
 }
 
-.lowFrameRateModal .buttonContainer a {
+.centerModal .buttonContainer a {
     text-decoration: none;
 }
 
-.lowFrameRateModal .buttonContainer a:hover {
+.centerModal .buttonContainer a:hover {
     background-color: initial;
 }
 
-.lowFrameRateModal .buttonContainer button:not(:last-child) {
+.centerModal .buttonContainer button:not(:last-child) {
     margin-right: 1rem;
+}
+
+.shareUrl {
+    margin-top: 1em;
+    text-align: center;
+    padding: 4px 12px;
+    background-color: rgba(255, 255, 255, 0.15);
+    font-size: 0.9em;
+    cursor: default;
+}
+
+.shareUrl:hover {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 .uiButton:not(.modal):hover, .modal a:hover {

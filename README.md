@@ -10,6 +10,14 @@ A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
 ### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
+### Visit some of my favourite worlds:
+
+- [aedc2b2763d21576c3e58334](https://manyworlds.neef.co/?world=aedc2b2763d21576c3e58334)
+- [b8f7732621222ffe4ee61b4](https://manyworlds.neef.co/?world=b8f7732621222ffe4ee61b4)
+- [c9ab3868a581992c1e6d8610](https://manyworlds.neef.co/?world=c9ab3868a581992c1e6d8610)
+- [27d5b2aa7e5ad81ee87a9912](https://manyworlds.neef.co/?world=27d5b2aa7e5ad81ee87a9912)
+- [4d61edfd31b4a14772b2c44](https://manyworlds.neef.co/?world=4d61edfd31b4a14772b2c44)
+
 ## Project setup
 
 This project is a simple single-page app built with TypeScript & Preact, and bundled with Snowpack & esbuild. The WebGL scene is rendered by a [custom renderer component](https://github.com/neefrehman/manyworlds/blob/main/src/components/WebGL/Renderer.tsx) that uses React/Preact hooks to create and manage a WebGL context. The renderer can accept shader [uniforms](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform), a fragment shader as a glsl string, and an `onFrame` callback used to update the uniforms and other attributes of the sketch. The interfaces for the renderer and callback props can be found in the component's file.

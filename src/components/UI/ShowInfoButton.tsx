@@ -37,20 +37,6 @@ export const ShowInfoButton = () => {
 
     return (
         <div>
-            <button
-                ref={buttonRef}
-                id="infoButton"
-                className="uiButton infoButton"
-                aria-label="info"
-                aria-expanded={infoIsVisible}
-                tabIndex={0}
-                onClick={() =>
-                    setInfoIsVisible(previnfoIsVisible => !previnfoIsVisible)
-                }
-            >
-                <span role="tooltip">{infoIsVisible ? "x" : "i"}</span>
-            </button>
-
             {infoIsVisible && (
                 <div
                     ref={modalRef}
@@ -83,6 +69,20 @@ export const ShowInfoButton = () => {
                     </p>
                 </div>
             )}
+            
+            <button
+                ref={buttonRef}
+                id="infoButton"
+                className="uiButton infoButton"
+                aria-label="info"
+                aria-expanded={infoIsVisible}
+                tabIndex={0}
+                onClick={() =>
+                    setInfoIsVisible(previnfoIsVisible => !previnfoIsVisible)
+                }
+            >
+                <span role="tooltip">{infoIsVisible ? "x" : "i"}</span>
+            </button>
         </div>
     );
 };

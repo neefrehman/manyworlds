@@ -1,14 +1,14 @@
 import { h } from "preact";
 import type { StateUpdater } from "preact/hooks";
 
-interface RefreshButtonProps {
+interface ShareButtonProps {
     onClick: StateUpdater<{}>;
 }
 
-export const RefreshButton = ({ onClick }: RefreshButtonProps) => {
+export const ShareButton = ({ onClick }: ShareButtonProps) => {
     return (
         <button className="uiButton nudgeDown" tabIndex={0} onClick={onClick}>
-            new world
+            share world
         </button>
     );
 };

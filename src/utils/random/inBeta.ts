@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { seededRandom } from "./seededRandom";
+
 /**
  * Produces a random number from a beta distribution
  *
@@ -31,13 +33,13 @@ function _inBeta(alpha: number, beta: number) {
         const ccc = alpha + ainv;
 
         while (true) {
-            const u1 = Math.random();
+            const u1 = seededRandom();
 
             if (!(u1 > 1e-7 && u1 < 0.9999999)) {
                 continue;
             }
 
-            const u2 = 1.0 - Math.random();
+            const u2 = 1.0 - seededRandom();
             v = Math.log(u1 / (1.0 - u1)) / ainv;
             x = alpha * Math.exp(v);
 
@@ -49,16 +51,16 @@ function _inBeta(alpha: number, beta: number) {
             }
         }
     } else if (alpha === 1.0) {
-        let u = Math.random();
+        let u = seededRandom();
 
         while (u <= 1e-7) {
-            u = Math.random();
+            u = seededRandom();
         }
 
         return -Math.log(u) * beta;
     } else {
         while (true) {
-            const u3 = Math.random();
+            const u3 = seededRandom();
             const b = (Math.E + alpha) / Math.E;
             const p = b * u3;
 
@@ -68,7 +70,7 @@ function _inBeta(alpha: number, beta: number) {
                 x = -Math.log((b - p) / alpha);
             }
 
-            const u4 = Math.random();
+            const u4 = seededRandom();
 
             if (p > 1.0) {
                 if (u4 <= x ** alpha - 1.0) {

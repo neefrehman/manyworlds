@@ -1,3 +1,5 @@
+import { seededRandom } from "./seededRandom";
+
 /**
  * Chooses a random number between min (inclusive) and max (exclusive).
  * If only one argument is provided, the min is defaulted to 0, and that argument
@@ -20,9 +22,9 @@ export const inRange = (
     const lowerBound = max ? min : 0;
 
     let generatedNumber = !isInteger
-        ? Math.random() * (upperBound - lowerBound) + lowerBound
+        ? seededRandom() * (upperBound - lowerBound) + lowerBound
         : Math.floor(
-              Math.random() * (Math.ceil(upperBound) - Math.floor(lowerBound) + 1)
+              seededRandom() * (Math.ceil(upperBound) - Math.floor(lowerBound) + 1)
           ) + Math.floor(lowerBound);
 
     if (not !== undefined && generatedNumber === not) {
