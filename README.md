@@ -10,13 +10,16 @@ A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
 ### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
-### Visit some of my favourite worlds:
+#### Sharing and saving
 
-- [aedc2b2763d21576c3e58334](https://manyworlds.neef.co/?world=aedc2b2763d21576c3e58334)
-- [b8f7732621222ffe4ee61b4](https://manyworlds.neef.co/?world=b8f7732621222ffe4ee61b4)
-- [c9ab3868a581992c1e6d8610](https://manyworlds.neef.co/?world=c9ab3868a581992c1e6d8610)
-- [27d5b2aa7e5ad81ee87a9912](https://manyworlds.neef.co/?world=27d5b2aa7e5ad81ee87a9912)
-- [4d61edfd31b4a14772b2c44](https://manyworlds.neef.co/?world=4d61edfd31b4a14772b2c44)
+Manyworlds uses a seeded random number generator. Clicking the share button on the site will give you a link that includes the seed for the current "world", allowing it to be revisited. Some of my favourites can be visited with the below seeds.
+
+- [`aedc2b2763d21576c3e58334`](https://manyworlds.neef.co/?world=aedc2b2763d21576c3e58334)
+- [`b8f7732621222ffe4ee61b4`](https://manyworlds.neef.co/?world=b8f7732621222ffe4ee61b4)
+- [`c9ab3868a581992c1e6d8610`](https://manyworlds.neef.co/?world=c9ab3868a581992c1e6d8610)
+- [`27d5b2aa7e5ad81ee87a9912`](https://manyworlds.neef.co/?world=27d5b2aa7e5ad81ee87a9912)
+- [`4d61edfd31b4a14772b2c44`](https://manyworlds.neef.co/?world=4d61edfd31b4a14772b2c44)
+- [`77d648b9441a118a923a967f`](https://manyworlds.neef.co/?world=77d648b9441a118a923a967f)
 
 ## Project setup
 
