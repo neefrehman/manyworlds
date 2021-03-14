@@ -19,7 +19,9 @@ Manyworlds uses a seeded random number generator. Clicking the share button on t
 - [`c9ab3868a581992c1e6d8610`](https://manyworlds.neef.co/?world=c9ab3868a581992c1e6d8610)
 - [`27d5b2aa7e5ad81ee87a9912`](https://manyworlds.neef.co/?world=27d5b2aa7e5ad81ee87a9912)
 - [`4d61edfd31b4a14772b2c44`](https://manyworlds.neef.co/?world=4d61edfd31b4a14772b2c44)
-- [`77d648b9441a118a923a967f`](https://manyworlds.neef.co/?world=77d648b9441a118a923a967f)
+<!-- - [`77d648b9441a118a923a967f`](https://manyworlds.neef.co/?world=77d648b9441a118a923a967f) -->
+<!-- - [`b4d40e63f60397fdb85de0`](https://manyworlds.neef.co/?world=b4d40e63f60397fdb85de0) -->
+<!-- - [`d9489d5b3fa2e8551b17f26`](https://manyworlds.neef.co/?world=d9489d5b3fa2e8551b17f26) -->
 
 ## Project setup
 

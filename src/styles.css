@@ -25,7 +25,7 @@ canvas {
     justify-content: flex-start;
 }
 
-.uiWrapper :not(:last-child) {
+.uiWrapper :not(:last-child, .modal) {
     margin-right: 1rem;
 }
 
