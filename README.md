@@ -6,7 +6,7 @@
 
 A scifi-inspired study of signed distanced functions and noise fields in WebGL.
 
-[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. This project is named after the [Many-worlds interpretation](https://en.wikipedia.org/wiki/Many-worlds_interpretation) in quantum physics. Nerdy inspirations include ideas and visualisations of ["warp"](https://static.wikia.nocookie.net/memoryalpha/images/1/10/USS_Enterprise_%28alternate_reality%29_at_warp.jpg/revision/latest/scale-to-width-down/1000?cb=20091120005658&path-prefix=en), science fiction [book covers](https://bookmust.wordpress.com/2014/06/08/rendezvous-with-rama/), and [Starfleet headquarters](https://i2.wp.com/musingsofamiddleagedgeek.files.wordpress.com/2020/11/30d90200-8b80-4ab0-a6c6-ae7f26637f02.jpeg) in season three of Star Trek: Discovery 💁🏾‍♂️
+[Signed Distance Functions](https://en.wikipedia.org/wiki/Signed_distance_function) are fun. With them, you can compute the distance to an object in a metric space, provided you have a function to describe that object's volume. When used alongside [Ray Marching](https://en.wikipedia.org/wiki/Volume_ray_casting) techniques, you can render views of these 3D objects as seen through a 2D plane. This project is an experiment in combining this method with various noise fields, to manipulate and distort these views. This project is named after the [Many-worlds interpretation](https://en.wikipedia.org/wiki/Many-worlds_interpretation) in quantum physics. Nerdy inspirations include science fiction [book covers](https://bookmust.wordpress.com/2014/06/08/rendezvous-with-rama/) and [visualisations](https://i2.wp.com/musingsofamiddleagedgeek.files.wordpress.com/2020/11/30d90200-8b80-4ab0-a6c6-ae7f26637f02.jpeg).
 
 ### See experiment: [manyworlds.neef.co](https://manyworlds.neef.co/)
 
@@ -42,7 +42,7 @@ To get started on your device, fork this repo and run:
 npm install && npm run start
 ```
 
-This will set up the (lightning fast, thanks to Snowpack) dev server, and you should be good to go.
+This will set up the dev server, and you should be good to go.
 
 #### Fast refresh dev server workaround
 
