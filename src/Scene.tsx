@@ -33,7 +33,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const actualWidth = width * pixelation;
         const actualHeight = height * pixelation;
 
-        const initialPlaybackSpeed = inGaussian(0.5, 0.02) * 0.0001;
+        const initialPlaybackSpeed = inGaussian(0.4, 0.025) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
         const idleMousePosition = inSquare(actualWidth, actualHeight);
@@ -63,6 +63,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: pick([0, 0, 1, 2, 3, 4, 5, 6, 7]),
                     type: "1i",
                 },
+                noiseStrength: { value: inBeta(2.5, 1), type: "1f" },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
                 sinScalar1: { value: inRange(0, 30), type: "1f" },
                 sinScalar2: { value: inRange(0, 5), type: "1f" },
@@ -88,7 +89,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 grainIntensity: { value: inRange(0.005, 0.026), type: "1f" },
 
                 baseShape: {
-                    value: inRange(0, 7, { isInteger: true }),
+                    value: inRange(0, 8, { isInteger: true }),
                     type: "1i",
                 },
                 shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
@@ -130,6 +131,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 #pragma glslify: sdCone = require("./utils/glsl/sdShapes/sdCone.glsl");
                 #pragma glslify: sdCappedCone = require("./utils/glsl/sdShapes/sdCappedCone.glsl");
                 #pragma glslify: sdPyramid = require("./utils/glsl/sdShapes/sdPyramid.glsl");
+                #pragma glslify: sdRhombus = require("./utils/glsl/sdShapes/sdRhombus.glsl");
 
                 #define PI 3.14159
                 #define TAU 2.0 * PI
@@ -147,6 +149,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 uniform vec3 color2;
 
                 uniform int noiseStyle;
+                uniform float noiseStrength;
                 uniform float sinNoiseScale;
                 uniform float sinScalar1;
                 uniform float sinScalar2;
@@ -255,6 +258,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                         shape = sdCone(shapePosition, vec2(shapeDimension3, shapeDimension2), shapeDimension1);
                     } else if (baseShape == 7) {
                         shape = sdCuboid(shapePosition, vec3(shapeDimension1 * 0.88));
+                    } else if (baseShape == 8) {
+                        shape = sdRhombus(shapePosition, 0.2, 0.2, 0.2, 0.2);
                     }
                     
                     vec3 noisePosition = rotate(
@@ -264,8 +269,8 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     );
 
                     float noiseField = 
-                        (0.83 - getNoise((noisePosition + vec3(0.0, 0.2, 0.0)) * sinNoiseScale))
-                        / sinNoiseScale;
+                        ((0.83 - getNoise((noisePosition + vec3(0.0, 0.2, 0.0)) * sinNoiseScale))
+                        / sinNoiseScale) * noiseStrength;
 
                     return max(shape, noiseField);
                 }
