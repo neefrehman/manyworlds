@@ -33,7 +33,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const actualWidth = width * pixelation;
         const actualHeight = height * pixelation;
 
-        const initialPlaybackSpeed = inGaussian(0.62, 0.018) * 0.0001;
+        const initialPlaybackSpeed = inGaussian(0.5, 0.02) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
         const idleMousePosition = inSquare(actualWidth, actualHeight);
