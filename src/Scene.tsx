@@ -93,7 +93,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: inRange(0, 9, { isInteger: true }),
                     type: "1i",
                 },
-                shouldRenderShape2: { value: createChance(0.33) ? 1 : 0, type: "1i" },
+                shouldRenderShape2: { value: createChance(0.4) ? 1 : 0, type: "1i" },
                 shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
                 shapeDimension2: { value: inRange(0.2, 0.35), type: "1f" },
                 shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
