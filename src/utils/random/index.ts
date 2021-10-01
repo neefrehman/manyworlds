@@ -1,4 +1,5 @@
 export { testHex, createRandomHex } from "./createRandomHex";
+export { createChance } from './createChance';
 export { createSign } from './createSign';
 export { inBeta } from './inBeta';
 export { inGaussian } from './inGaussian';

@@ -10,6 +10,7 @@ import { WebGLRenderer } from "./components/WebGL";
 import { hexToVec3 } from "./utils/glsl/hexToVec3";
 import { clamp, lerp, lerpVector } from "./utils/math";
 import {
+    createChance,
     createRandomHex,
     createSign,
     inBeta,
@@ -63,7 +64,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: pick([0, 0, 1, 2, 3, 4, 5, 6, 7]),
                     type: "1i",
                 },
-                noiseStrength: { value: inBeta(2.5, 1), type: "1f" },
+                noiseStrength: { value: createChance(0.1) ? 0 : inBeta(2, 1), type: "1f" },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
                 sinScalar1: { value: inRange(0, 30), type: "1f" },
                 sinScalar2: { value: inRange(0, 5), type: "1f" },
@@ -77,7 +78,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     ],
                     type: "3f",
                 },
-                highFrequencysimplexNoiseScale: {
+                highFrequencySimplexNoiseScale: {
                     value: 1.5 + inBeta(1, 3) * 48.5,
                     type: "1f",
                 },
@@ -89,9 +90,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 grainIntensity: { value: inRange(0.005, 0.026), type: "1f" },
 
                 baseShape: {
-                    value: inRange(0, 8, { isInteger: true }),
+                    value: inRange(0, 9, { isInteger: true }),
                     type: "1i",
                 },
+                shouldRenderShape2: { value: createChance(0.33) ? 1 : 0, type: "1i" },
                 shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
                 shapeDimension2: { value: inRange(0.2, 0.35), type: "1f" },
                 shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
@@ -103,7 +105,23 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     ],
                     type: "3f",
                 },
+                shape2PositionOffset: {
+                    value: [
+                        inGaussian(0, 0.6),
+                        inGaussian(0, 0.4),
+                        clamp(-0.95, inGaussian(0, 0.8), 0.5),
+                    ],
+                    type: "3f",
+                },
                 shapeRotationVector: {
+                    value: [
+                        inBeta(11, 1) * createSign(),
+                        inBeta(11, 1) * createSign(),
+                        inBeta(11, 1) * createSign(),
+                    ],
+                    type: "3f",
+                },
+                shape2RotationVector: {
                     value: [
                         inBeta(11, 1) * createSign(),
                         inBeta(11, 1) * createSign(),
@@ -156,17 +174,20 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 uniform int scalarSwap;
                 uniform float simplexNoiseScale;
                 uniform vec3 stretchedSimplexNoiseScale;
-                uniform float highFrequencysimplexNoiseScale;
+                uniform float highFrequencySimplexNoiseScale;
                 uniform float simplexIntensity;
                 uniform float noiseRotationSpeed;
                 uniform float grainIntensity;
 
                 uniform int baseShape;
+                uniform int shouldRenderShape2;
                 uniform float shapeDimension1;
                 uniform float shapeDimension2;
                 uniform float shapeDimension3;
                 uniform vec3 shapePositionOffset;
+                uniform vec3 shape2PositionOffset;
                 uniform vec3 shapeRotationVector;
+                uniform vec3 shape2RotationVector;
                 uniform float shapeRotationSpeed;
 
                 float getNoise(vec3 pos) {
@@ -205,13 +226,13 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                         return max(
                             sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale),
                             ( sin(pos.x * 2.0) + sin(pos.y * 2.0) + (sin(pos.z * 2.0) * sinNoiseScale)
-                            + noise(vec4(pos * highFrequencysimplexNoiseScale, time * 8.7)) * simplexIntensity * 2.0 )
+                            + noise(vec4(pos * highFrequencySimplexNoiseScale, time * 8.7)) * simplexIntensity * 2.0 )
                         );
                     } else if (noiseStyle == 5) {
                         // additive - high simplex field frequency — 160121
                         return
                             sin(pos.x) + sin(pos.y) + sin(pos.z) / (sinNoiseScale / (sinNoiseScale * 7.0)) +
-                            noise(vec4(pos * highFrequencysimplexNoiseScale, time * 21.0)) * simplexIntensity;
+                            noise(vec4(pos * highFrequencySimplexNoiseScale, time * 21.0)) * simplexIntensity;
                     } else if (noiseStyle == 6) {
                         // inverted volume with simplex field — 150121
                         return min(
@@ -238,29 +259,49 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                         shapeRotationVector,
                         time * shapeRotationSpeed * TAU
                     );
+                    vec3 shape2Position = rotate(
+                        vec3(pos + shape2PositionOffset),
+                        shape2RotationVector,
+                        time * shapeRotationSpeed * TAU
+                    );
 
                     float shape = 0.0;
+                    float shape2 = 0.0;
 
                     if (baseShape == 0) {
                         shape = sdSphere(shapePosition, shapeDimension1);
+                        shape2 = sdSphere(shape2Position, shapeDimension1);
                     } else if (baseShape == 1) {
                         shape = sdEllipsoid(shapePosition, vec3(shapeDimension1, shapeDimension2, shapeDimension3));
+                        shape2 = sdEllipsoid(shapePosition, vec3(shapeDimension1, shapeDimension2, shapeDimension3));
                     } else if (baseShape == 2) {
                         shape = sdOctahedron(shapePosition, shapeDimension1);
+                        shape2 = sdOctahedron(shapePosition, shapeDimension1);
                     } else if (baseShape == 3) {
                         shape = sdTorus(shapePosition, vec2(shapeDimension1, shapeDimension2));
+                        shape2 = sdTorus(shape2Position, vec2(shapeDimension1, shapeDimension2));
                     } else if (baseShape == 4) {
                         shape = sdCappedCone(shapePosition, shapeDimension1, shapeDimension3, shapeDimension2);
+                        shape2 = sdCappedCone(shape2Position, shapeDimension1, shapeDimension3, shapeDimension2);
                     } else if (baseShape == 5) {
                         shape = sdPyramid(shapePosition, shapeDimension1);
+                        shape2 = sdPyramid(shape2Position, shapeDimension1);
                     } else if (baseShape == 6) {
                         shapePosition -= vec3(0.2, 0.2, 0.0);
                         shape = sdCone(shapePosition, vec2(shapeDimension3, shapeDimension2), shapeDimension1);
+                        shape2 = sdCone(shape2Position, vec2(shapeDimension3, shapeDimension2), shapeDimension1);
                     } else if (baseShape == 7) {
                         shape = sdCuboid(shapePosition, vec3(shapeDimension1 * 0.88));
+                        shape2 = sdCuboid(shape2Position, vec3(shapeDimension1 * 0.88));
                     } else if (baseShape == 8) {
                         shape = sdRhombus(shapePosition, 0.2, 0.2, 0.2, 0.2);
+                        shape2 = sdRhombus(shape2Position, 0.2, 0.2, 0.2, 0.2);
+                    } else if (baseShape == 9) {
+                        shape = sdRhombus(vec3(shapePosition.x - 0.3, shapePosition.y, shapePosition.z + 0.06), 0.2, 0.5, 0.1, 0.02);
+                        shape2 = sdRhombus(vec3(shape2Position.x - 0.3, shapePosition.y, shapePosition.z + 0.06), 0.2, 0.5, 0.1, 0.02);
                     }
+
+                    shape = shouldRenderShape2 == 1 ? min(shape, shape2) : shape;
                     
                     vec3 noisePosition = rotate(
                         pos,
