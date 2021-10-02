@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "visualstudioexptteam.vscodeintellicode",
+        "steoates.autoimport",
+        "slevesque.shader",
+        "cadenas.vscode-glsllint",
+        "raczzalan.webgl-glsl-editor"
+    ],
+    "unwantedRecommendations": []
+}
