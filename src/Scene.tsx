@@ -64,7 +64,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: pick([0, 0, 1, 2, 3, 4, 5, 6, 7]),
                     type: "1i",
                 },
-                noiseStrength: { value: createChance(0.1) ? 0 : inBeta(2, 1), type: "1f" },
+                noiseStrength: {
+                    value: createChance(0.08) ? 0 : inBeta(2, 1),
+                    type: "1f",
+                },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
                 sinScalar1: { value: inRange(0, 30), type: "1f" },
                 sinScalar2: { value: inRange(0, 5), type: "1f" },
@@ -93,7 +96,10 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     value: inRange(0, 9, { isInteger: true }),
                     type: "1i",
                 },
-                shouldRenderShape2: { value: createChance(0.4) ? 1 : 0, type: "1i" },
+                shouldRenderShape2: {
+                    value: createChance(0.38) ? 1 : 0,
+                    type: "1i",
+                },
                 shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
                 shapeDimension2: { value: inRange(0.2, 0.35), type: "1f" },
                 shapeDimension3: { value: inRange(0.32, 0.4), type: "1f" },
@@ -294,10 +300,15 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                         shape = sdCuboid(shapePosition, vec3(shapeDimension1 * 0.88));
                         shape2 = sdCuboid(shape2Position, vec3(shapeDimension1 * 0.88));
                     } else if (baseShape == 8) {
-                        shape = sdRhombus(shapePosition, 0.2, 0.2, 0.2, 0.2);
-                        shape2 = sdRhombus(shape2Position, 0.2, 0.2, 0.2, 0.2);
+                        shape = sdRhombus(shapePosition, 0.2, 0.2, 0.2, 0.3);
+                        shape2 = sdRhombus(shape2Position, 0.2, 0.2, 0.2, 0.3);
                     } else if (baseShape == 9) {
-                        shape = sdRhombus(vec3(shapePosition.x - 0.3, shapePosition.y, shapePosition.z + 0.06), 0.2, 0.5, 0.1, 0.02);
+                        vec3 rhombus1Pos = vec3(shapePosition.x - 0.3, shapePosition.y, shapePosition.z + 0.06);
+                        vec3 rhombus2Pos = vec3(shapePosition.x + 0.0, shapePosition.y, shapePosition.z + 0.00);
+                        vec3 rhombus2RotatedPos = rotate(rhombus2Pos, vec3(0.0, -0.005, 0.0), 2.65);
+                        float rhombus1 = sdRhombus(rhombus1Pos, 0.1, 0.4, shapeDimension1 * 0.1, 0.02);
+                        float rhombus2 = sdRhombus(rhombus2RotatedPos, 0.1, 0.4, shapeDimension1 * 0.1, 0.02);
+                        shape = min(rhombus1, rhombus2);
                         shape2 = sdRhombus(vec3(shape2Position.x - 0.3, shapePosition.y, shapePosition.z + 0.06), 0.2, 0.5, 0.1, 0.02);
                     }
 
