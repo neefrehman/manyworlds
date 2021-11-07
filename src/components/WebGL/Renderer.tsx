@@ -100,6 +100,9 @@ export const WebGLRenderer = ({
     useEffect(() => {
         // Create WebGL context and program
         const canvas = canvasElement.current;
+        if (!canvas) {
+            return;
+        }
         const gl = canvas.getContext("webgl") as WebGLRenderingContext;
         const program = gl.createProgram() as WebGLProgram;
 
