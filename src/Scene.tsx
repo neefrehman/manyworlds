@@ -65,7 +65,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "1i",
                 },
                 noiseStrength: {
-                    value: createChance(0.08) ? 0 : inBeta(2, 1),
+                    value: createChance(0.066) ? 0 : inBeta(2, 1),
                     type: "1f",
                 },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
