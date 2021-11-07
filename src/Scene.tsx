@@ -72,7 +72,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                 sinScalar1: { value: inRange(0, 30), type: "1f" },
                 sinScalar2: { value: inRange(0, 5), type: "1f" },
                 scalarSwap: { value: createSign(0.6), type: "1i" },
-                simplexNoiseScale: { value: inRange(0.58, 0.67), type: "1f" },
+                simplexNoiseScale: { value: inRange(0.57, 0.67), type: "1f" },
                 stretchedSimplexNoiseScale: {
                     value: [
                         inRange(0.4, 0.6),
@@ -97,7 +97,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "1i",
                 },
                 shouldRenderShape2: {
-                    value: createChance(0.38) ? 1 : 0,
+                    value: createChance(0.366) ? 1 : 0,
                     type: "1i",
                 },
                 shapeDimension1: { value: inRange(0.4, 0.52), type: "1f" },
