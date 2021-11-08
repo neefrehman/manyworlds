@@ -103,6 +103,7 @@ export const WebGLRenderer = ({
         if (!canvas) {
             return;
         }
+
         const gl = canvas.getContext("webgl") as WebGLRenderingContext;
         const program = gl.createProgram() as WebGLProgram;
 
