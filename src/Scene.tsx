@@ -34,7 +34,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
         const actualWidth = width * pixelation;
         const actualHeight = height * pixelation;
 
-        const initialPlaybackSpeed = inGaussian(0.4, 0.025) * 0.0001;
+        const initialPlaybackSpeed = clamp(-1.8, inGaussian(0.4, 1), 1.8) * 0.0001;
         let playbackSpeed = initialPlaybackSpeed;
 
         const idleMousePosition = inSquare(actualWidth, actualHeight);
@@ -65,7 +65,7 @@ const createSketch = (setIsLowFrameRate: StateUpdater<boolean>) => {
                     type: "1i",
                 },
                 noiseStrength: {
-                    value: createChance(0.055) ? 0 : inBeta(2, 1),
+                    value: createChance(0.05) ? 0 : inBeta(2, 1),
                     type: "1f",
                 },
                 sinNoiseScale: { value: inRange(5, 12), type: "1f" },
