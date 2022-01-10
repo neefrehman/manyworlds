@@ -1,6 +1,5 @@
 import type { Vector } from "../../utils/math/types";
 
-
 // WebGL helper types
 
 // Uniform types currently supported by the renderer
@@ -14,13 +13,13 @@ export type UniformValue = number | Vector | Float32List | Int32List;
  * A uniform value to interface with shaders
  */
 export interface Uniform<T extends UniformType> {
-    value: any;
-    type: T;
+  value: any;
+  type: T;
 }
 
 /**
  * A dictionary of uniforms
  */
 export interface UniformDict {
-    [uniformName: string]: Uniform<UniformType>;
+  [uniformName: string]: Uniform<UniformType>;
 }

@@ -9,6 +9,6 @@ import { seededRandom } from "./seededRandom";
  * @returns A vector point within the square
  */
 export const inSquare = (width = 1, height = 1): Vector<2> => [
-    seededRandom() * width,
-    seededRandom() * height,
+  seededRandom() * width,
+  seededRandom() * height,
 ];

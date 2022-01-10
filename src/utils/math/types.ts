@@ -9,9 +9,9 @@
  */
 // Vector type discourse: https://github.com/microsoft/TypeScript/issues/26223
 export interface Vector<D extends number = any> extends Array<number> {
-    // @ts-expect-error: optional item required
-    0?: number;
-    length: D;
+  // @ts-expect-error: optional item required
+  0?: number;
+  length: D;
 }
 
 const _SNOWPACK = true; // https://github.com/snowpackjs/snowpack/discussions/1589

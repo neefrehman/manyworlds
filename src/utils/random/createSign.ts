@@ -5,4 +5,5 @@ import { seededRandom } from "./seededRandom";
  *
  * @param probablity - the probability of returning `1`
  */
-export const createSign = (probability = 0.5) => (seededRandom() > probability ? 1 : -1);
+export const createSign = (probability = 0.5) =>
+  seededRandom() > probability ? 1 : -1;

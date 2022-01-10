@@ -5,4 +5,5 @@ import { seededRandom } from "./seededRandom";
  *
  * @param array - the array to be chosen from
  */
-export const pick = <T>(array: T[]) => array[Math.floor(seededRandom() * array.length)];
+export const pick = <T>(array: T[]) =>
+  array[Math.floor(seededRandom() * array.length)];
